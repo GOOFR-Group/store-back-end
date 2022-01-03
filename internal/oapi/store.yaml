@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: "GOOFR Store"
+  description: "API documentation for GOOFR Store, a digital game store."
+  version: "1.0.0"
+  contact:
+    email: "help.goofrportugal@gmail.com"
+
+servers:
+  - url: '{protocol}://{host}:{port}/api'
+    variables:
+      protocol:
+        enum: 
+          - 'http'
+          - 'https'
+        default: 'http'
+      host:
+        enum:
+          - 'localhost'
+          - 'prod'
+        default: 'localhost'
+      port:
+        enum:
+          - '8080'
+        default: '8080'
+
+paths:
+  
+  # Server 
+  
+  /health:
+    get:
+      summary: "Health check"
+      description: "Checks the server health status"
+      tags:
+        - Server
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: string
+              example: "I'm fine, thanks for asking!"
+
+  /docs:
+    get:
+      summary: "Documentation"
+      description: "Documentation for this API"
+      tags:
+        - Server
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            text/html:
+              schema:
+                type: string
+                  
+components:
+  schemas:
+    VersionSchema:
+      type: object
+      required:
+        - version
+        - notes  
+      properties:
+        version:
+          type: string
+        notes:
+          type: string

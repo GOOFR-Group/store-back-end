@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  db:
+    image: store_postgres:latest
+    build:
+      context: tools/db/
+      dockerfile: Dockerfile
+    healthcheck:
+      test: nc -vz localhost 5432
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=store_db
+      - POSTGRES_USER=goofr
+      - POSTGRES_PASSWORD=goofr
+    volumes:
+      - database-data:/var/lib/postgresql/data
+      - $PWD/tools/db/initdb/.:/docker-entrypoint-initdb.d/
+  api:
+    image: store_api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GOTAGS: dev
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -X
+        - GET
+        - -f
+        - http://localhost:8080/api/health
+      interval: 3m
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - GOOFR_Store_PATH=/go
+      - GOOFR_Store_CONF_PATH=conf
+      - GOOFR_Store_STATIC_PATH=static
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=store_db
+      - DB_USER=goofr
+      - DB_PASSWORD=goofr
+      - DB_SSLMODE=disable
+    restart: unless-stopped
+
+volumes:
+  database-data: null
