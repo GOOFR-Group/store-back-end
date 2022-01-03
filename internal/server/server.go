@@ -17,7 +17,7 @@ import (
 
 var CORSOptions = cors.Options{
 	AllowedOrigins: []string{"*"},
-	AllowedMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodOptions},
+	AllowedMethods: []string{http.MethodPost, http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions},
 }
 
 // RunServer entry point
@@ -32,7 +32,7 @@ func RunServer(ctx context.Context) error {
 	conf.InitRouter()
 	storage.InitStorage()
 
-	// register our rest services
+	// register the rest services
 	if err := handlers.Register(); err != nil {
 		return err
 	}
