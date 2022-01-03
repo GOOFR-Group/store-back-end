@@ -15,6 +15,7 @@ import (
 	"github.com/GOOFR-Group/store-back-end/internal/storage"
 )
 
+// CORSOptions represents our handler (CORS) options
 var CORSOptions = cors.Options{
 	AllowedOrigins: []string{"*"},
 	AllowedMethods: []string{http.MethodPost, http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions},
@@ -40,7 +41,7 @@ func RunServer(ctx context.Context) error {
 	port := conf.GetPort()
 
 	// log this service as a whole
-	logging.AppLogger.Info().Str("version", core.GetVersion().Version).Str("notes", core.GetVersion().Notes).Msg("GOOFR Store API")
+	logging.AppLogger.Info().Str("version", core.Version().Version).Str("notes", core.Version().Notes).Msg("GOOFR Store API")
 	logging.AppLogger.Info().Msgf("Listening on port %d", port)
 
 	// add CORS options

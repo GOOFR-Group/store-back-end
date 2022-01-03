@@ -10,6 +10,7 @@ import (
 // AppLogger logger for this app
 var AppLogger zerolog.Logger
 
+// Initialize configures the logging system
 func Initialize() {
 	// log setup
 	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: zerolog.TimeFormatUnix}

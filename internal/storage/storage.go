@@ -13,6 +13,7 @@ import (
 // Transaction is a more descriptive alias for the database record's SessionRunner interface
 type Transaction dbr.SessionRunner
 
+// InitStorage starts a new database connection
 func InitStorage() {
 	dbConn, err := newConnection(conf.GetDbConnectionString())
 	if err != nil {

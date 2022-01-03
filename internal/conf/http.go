@@ -8,12 +8,15 @@ import (
 	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
 )
 
+// AppPort represents the environment variable port of this API
 const AppPort = app.Name + "_PORT"
 
+// DefaultAppPort represents the default port of this API
 const DefaultAppPort = "8080"
 
 var port int
 
+// InitServer starts the environment variables required for the Server
 func InitServer() {
 	portEnvValue := env.GetEnvOrDefault(AppPort, DefaultAppPort)
 

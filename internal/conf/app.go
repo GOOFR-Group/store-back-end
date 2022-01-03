@@ -19,6 +19,7 @@ var (
 	staticPath string
 )
 
+// InitApp starts the environment variables required for the application
 func InitApp() {
 	mainPath = env.GetEnvOrPanic(AppPath)
 	confPath = env.GetEnvOrPanic(AppConfPath)

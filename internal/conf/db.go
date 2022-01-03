@@ -20,6 +20,7 @@ const (
 
 var dbConfiguration postgresql.Configuration
 
+// InitDB starts the database configuration
 func InitDB() {
 	dbConfiguration = postgresql.LoadConfigurationFromEnv(postgresql.Defaults{
 		DBHost:    DefaultDBHost,
@@ -30,7 +31,7 @@ func InitDB() {
 	})
 }
 
-//GetDbConnectionString retrieves the configured database connection string
+// GetDbConnectionString retrieves the configured database connection string
 func GetDbConnectionString() string {
 	return dbConfiguration.DbConnectionString
 }

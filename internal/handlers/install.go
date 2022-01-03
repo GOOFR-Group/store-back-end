@@ -7,6 +7,7 @@ import (
 	"github.com/GOOFR-Group/store-back-end/internal/oapi"
 )
 
+// StoreImpl represents the implementation of all the server handlers
 type StoreImpl struct{}
 
 // Register registers the server handlers
