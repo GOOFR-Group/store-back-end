@@ -37,8 +37,9 @@ func RunServer(ctx context.Context) error {
 		return err
 	}
 
-	// log this service as a whole
 	port := conf.GetPort()
+
+	// log this service as a whole
 	logging.AppLogger.Info().Str("version", core.GetVersion().Version).Str("notes", core.GetVersion().Notes).Msg("GOOFR Store API")
 	logging.AppLogger.Info().Msgf("Listening on port %d", port)
 

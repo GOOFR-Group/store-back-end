@@ -9,6 +9,7 @@ import (
 
 type StoreImpl struct{}
 
+// Register registers the server handlers
 func Register() error {
 	router := conf.GetRouter()
 	if router == nil {
