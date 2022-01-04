@@ -7,6 +7,11 @@ import (
 )
 
 const (
+	logHandlerKey = "handler"
+	logErrorKey   = "error"
+)
+
+const (
 	contentTypeJSON   = "application/json"
 	contentTypeHeader = "Content-Type"
 )

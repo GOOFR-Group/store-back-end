@@ -3,6 +3,7 @@ module github.com/GOOFR-Group/store-back-end
 go 1.17
 
 require (
+	github.com/deepmap/oapi-codegen v1.9.0
 	github.com/getkin/kin-openapi v0.87.0
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-openapi/runtime v0.21.0
