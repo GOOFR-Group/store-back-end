@@ -4,8 +4,11 @@ import "github.com/go-chi/chi/v5"
 
 var router *chi.Mux
 
-// RouterPathPrefix represents the path prefix of this API
-const RouterPathPrefix = "/api"
+// RouterPathAPIPrefix represents the path prefix of this API
+const RouterPathAPIPrefix = "/api"
+
+// RouterPathAPIPrefix represents the path prefix of this API's documentation
+const RouterPathDocsPrefix = "/docs"
 
 // InitRouter creates a new router
 func InitRouter() {
