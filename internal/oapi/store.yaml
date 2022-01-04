@@ -1,0 +1,2127 @@
+openapi: 3.0.3
+info:
+  title: "GOOFR Store"
+  description: "API documentation for GOOFR Store, a digital game store."
+  version: "1.0.0"
+  contact:
+    email: "help.goofrportugal@gmail.com"
+
+servers:
+  - url: '{protocol}://{host}:{port}/api'
+    variables:
+      protocol:
+        enum: 
+          - 'http'
+          - 'https'
+        default: 'http'
+      host:
+        enum:
+          - 'localhost'
+          - 'prod'
+        default: 'localhost'
+      port:
+        enum:
+          - '8080'
+        default: '8080'
+
+paths:
+  
+  # Server 
+  
+  /health:
+    get:
+      summary: "Health check"
+      description: "Checks the server health status"
+      tags:
+        - Server
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: string
+              example: "I'm fine, thanks for asking!"
+
+  # Store
+  
+  /yourStore:
+    get:
+      summary: "Client's main store"
+      tags:
+        - Store
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YourStoreSchema'
+  
+  /newStore:
+    get:
+      summary: "Returns the new games from the store"
+      description: "Returns the most recently released games. If provided, filters games by their tags"
+      tags:
+        - Store
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+          description: "Tag ids"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewStoreSchema'
+  
+  /noteworthyStore:
+    get:
+      summary: "Returns featured games from the store"
+      description: "Returns the most purchased games from the store. If provided, filters games by their tags"
+      tags:
+        - Store
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+          description: "Tag ids"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteworthyStoreSchema'
+                  
+  # Game
+  
+  /game:
+    post:
+      summary: "Creates a new game"
+      tags:
+        - Game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "publisher not found with ID: [id]"
+    
+    get:
+      summary: "Gets a game"
+      description: "Gets a game by ID or gets all games if no ID is given"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+                
+    put:
+      summary: "Updates a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+                
+    delete: 
+      summary: "Deletes a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+  
+  /gameTag:
+    post:
+      summary: "Adds a tag to a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+        - in: query
+          name: tagID
+          schema:
+            type: string
+          required: true
+          description: "Tag ID"
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game already contains the given tag"
+    
+    get:
+      summary: "Gets all tags of a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/TagSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+
+    delete: 
+      summary: "Removes a tag from a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+        - in: query
+          name: tagID
+          schema:
+            type: string
+          required: true
+          description: "Tag ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+  
+  /gameImage:
+    post:
+      summary: "Adds an image to a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+        - in: query
+          name: image
+          schema:
+            type: string
+          required: true
+          description: "Image URL"
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+        
+    get:
+      summary: "Gets all images of a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameImageSchema'
+                  
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+
+    delete: 
+      summary: "Removes an image from a game"
+      tags:
+        - Game
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Image ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameImageSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "image not found with ID: [id]"
+  
+  # Publisher
+  
+  /publisher:
+    post:
+      summary: "Creates a new publisher"
+      tags:
+        - Publisher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublisherSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+    get:
+      summary: "Gets a publisher"
+      description: "Gets a publisher by ID or gets all publishers if no ID is given"
+      tags:
+        - Publisher
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+          description: "Publisher ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/PublisherSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "publisher not found with ID: [id]"
+                
+    put:
+      summary: "Updates a publisher"
+      tags:
+        - Publisher
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Publisher ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublisherSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "publisher not found with ID: [id]"
+                
+    delete: 
+      summary: "Deletes a publisher"
+      tags:
+        - Publisher
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Publisher ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublisherSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "publisher not found with ID: [id]"
+  
+  /publisherGames:
+    get:
+      summary: "Gets all the publisher's games"
+      tags:
+        - Publisher
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Publisher ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "publisher not found with ID: [id]"
+  
+  # Client
+  
+  /client:
+    get:
+      summary: "Gets a client"
+      description: "Gets a client by ID or gets all clients if no ID is given"
+      tags:
+        - Client
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+                
+    put:
+      summary: "Updates a client"
+      tags:
+        - Client
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+                
+    delete: 
+      summary: "Deletes a client"
+      tags:
+        - Client
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  # Access
+  
+  /login:
+    post:
+      summary: "Log in to a client's account"
+      tags:
+        - Access
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientAccessSchema'
+      responses:
+        '201': 
+          description: "successfully logged in"
+        
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "email not registered"
+    
+  /register:
+    post:
+      summary: "Registers a client"
+      tags:
+        - Access
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientAccessSchema'
+      responses:
+        '201': 
+          description: "successfully created"
+        
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "email already registered"
+    
+  /access:
+    put:
+      summary: "Updates a client access"
+      tags:
+        - Access
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientAccessSchema'
+      responses:
+        '204':
+          description: "successfully updated"
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "access not found for client ID: [id]"
+  
+  # Address
+  
+  /address:
+    get:
+      summary: "Gets a client's address"
+      tags:
+        - Address
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ClientAddressSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "address not found for client ID: [id]"
+                
+    put:
+      summary: "Updates an address"
+      tags:
+        - Address
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Address ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientAddressSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientAddressSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "address not found with ID: [id]"
+  
+  # Wallet
+  
+  /wallet:
+    get:
+      summary: "Gets a client's wallet"
+      tags:
+        - Wallet
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientWalletSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "wallet not found for client ID: [id]"
+                
+    put:
+      summary: "Updates a wallet"
+      tags:
+        - Wallet
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Wallet ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientWalletSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientWalletSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "wallet not found with ID: [id]"
+  
+  /addBalance:
+    get:
+      summary: "Adds balance to the client's wallet"
+      tags:
+        - Wallet
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: amount
+          schema:
+            type: number
+            format: double
+          required: true
+          description: "Amount to add"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ClientWalletSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "wallet not found for client ID: [id]"
+                
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "invalid amount"
+  
+  # Cart
+  
+  /cart:
+    post:
+      summary: "Adds a game to the client's cart"
+      tags:
+        - Cart
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client already has the given game in his cart"
+    
+    get:
+      summary: "Gets all the games the client has in his cart"
+      tags:
+        - Cart
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+
+    delete: 
+      summary: "Removes a game from the client's cart"
+      description: "Removes a game from the client cart by ID or removes all games from its cart if no ID is given"
+      tags:
+        - Cart
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: false
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  /cartPurchase:
+    get:
+      summary: "Purchases all games the client has in his cart"
+      tags:
+        - Cart
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/InvoiceSchema'
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+                
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client does not have enough balance"
+                  
+  # Wishlist
+  
+  /wishlist:
+    post:
+      summary: "Adds a game to the client's wishlist"
+      tags:
+        - Wishlist
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client already has the given game in his wishlist"
+    
+    get:
+      summary: "Gets all the games the client has in his wishlist"
+      tags:
+        - Wishlist
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+
+    delete: 
+      summary: "Removes a game from the client's wishlist"
+      description: "Removes a game from the client wishlist by ID or removes all games from its wishlist if no ID is given"
+      tags:
+        - Wishlist
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: false
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  # Library
+  
+  /library:
+    get:
+      summary: "Gets all the games the client has in his library"
+      tags:
+        - Library
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  # Invoice
+  
+  /invoice:
+    get:
+      summary: "Gets the client's invoice history"
+      tags:
+        - Invoice
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/InvoiceSchema'
+                  
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  # Review
+  
+  /review:
+    post:
+      summary: "Creates a new review"
+      tags:
+        - Review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client has already reviewed the game"
+
+    put:
+      summary: "Updates a review"
+      tags:
+        - Review
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Review ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewSchema'
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSchema'
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "review not found with ID: [id]"
+                
+    delete: 
+      summary: "Deletes a review"
+      tags:
+        - Review
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Review ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "review not found with ID: [id]"
+  
+  /gameReviews:
+    get:
+      summary: "Gets all the reviews for a game"
+      tags:
+        - Review
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ReviewSchema'
+                  
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "game not found with ID: [id]"
+                
+  # Search
+  
+  /searchGame:
+    get:
+      summary: "Search games"
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          required: true
+          description: "Search query"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+  
+  /searchTag:
+    get:
+      summary: "Search tags"
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          required: true
+          description: "Search query"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/TagSchema'
+  
+  /searchHistory:
+    post:
+      summary: "Adds a search to the client's history"
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: clientID
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+        - in: query
+          name: gameID
+          schema:
+            type: string
+          required: true
+          description: "Game ID"
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+        
+    get:
+      summary: "Gets the client's search history"
+      tags:
+        - Search
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Client ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/SearchSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "client not found with ID: [id]"
+  
+  # Tag
+  
+  /tag:
+    post:
+      summary: "Creates a new tag"
+      tags:
+        - Tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagSchema'
+      responses:
+        '201':
+          description: "successfully created"
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+    
+    get:
+      summary: "Gets a tag"
+      description: "Gets a tag by ID or gets all tags if no ID is given"
+      tags:
+        - Tag
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+          description: "Tag ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/TagSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "tag not found with ID: [id]"
+                
+    put:
+      summary: "Updates a tag"
+      tags:
+        - Tag
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Tag ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagSchema'
+      responses:
+        '204':
+          description: "successfully updated"
+                
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "tag not found with ID: [id]"
+                
+    delete: 
+      summary: "Deletes a tag"
+      tags:
+        - Tag
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Tag ID"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "tag not found with ID: [id]"
+                
+  # Newsletter
+
+  /newsletter:
+    post:
+      summary: "Adds an email to the newsletter list"
+      tags:
+        - Newsletter
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+          description: "Email to subscribe"
+      responses:
+        '201':
+          description: "successfully subscribed"
+        
+        '409':
+          description: "conflict"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "email already subscribed: [email]"
+                
+    get:
+      summary: "Gets the list of email subscribed to the newsletter"
+      tags:
+        - Newsletter
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/NewsletterSchema'
+        
+    delete: 
+      summary: "Removes an email from the newsletter list"
+      tags:
+        - Newsletter
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+          description: "Email to unsubscribe"
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterSchema'
+        
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "email not yet subscribed: [email]"
+  
+  # Statistics
+  
+  /topReviews:
+    get:
+      summary: "Gets the top reviewed games"
+      tags:
+        - Statistics
+      responses:
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/GameSchema'
+                  
+components:
+  schemas:
+  
+    YourStoreSchema:
+      type: object
+      required:
+        - featured 
+        - recommended 
+        - specialOffers 
+        - discover 
+      properties:
+        featured:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+        recommended:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+        specialOffers :
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+        discover:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+  
+    NewStoreSchema:
+      type: object
+      required:
+        - featured 
+        - new
+      properties:
+        featured:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+        new:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+    
+    NoteworthyStoreSchema:
+      type: object
+      required:
+        - featured 
+        - noteworthy
+      properties:
+        featured:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+        noteworthy:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSchema'
+  
+    GameSchema:
+      type: object
+      required:
+        - id_publisher
+        - name
+        - price
+        - discount
+        - state
+        - cover_image
+        - release_date
+        - description
+        - download_link
+      properties:
+        id:
+          type: string
+        id_publisher:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        discount:
+          type: number
+          format: double
+        state:
+          type: string
+          enum:
+            - "active"
+            - "inactive"
+            - "upcoming"
+        cover_image:
+          type: string
+        release_date:
+          type: string
+          format: date
+        description:
+          type: string
+        download_link:
+          type: string
+    
+    GameImageSchema:
+      type: object
+      required:
+        - id
+        - id_game
+        - image
+      properties:
+        id:
+          type: string
+        id_game:
+          type: string
+        image:
+          type: string
+    
+    PublisherSchema:
+      type: object
+      required:
+        - name
+        - cover_image
+        - phone_number
+        - email
+      properties:
+        id:
+          type: string 
+        name:
+          type: string 
+        cover_image:
+          type: string 
+        phone_number:
+          type: string 
+        email:
+          type: string 
+
+    ClientSchema:
+      type: object
+      required:
+        - name
+        - surname
+        - picture
+        - birthdate
+        - phone_number
+        - vat_id
+        - active
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        picture:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        phone_number:
+          type: string
+        vat_id:
+          type: integer
+        active:
+          type: boolean
+    
+    ClientAccessSchema:
+      type: object
+      required:
+        - oauth
+        - email
+        - created_at
+      properties:
+        id:
+          type: string
+        id_client:
+          type: string
+        oauth:
+          type: boolean
+        email:
+          type: string
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    
+    ClientAddressSchema:
+      type: object
+      required:
+        - street
+        - zip_code
+        - city
+        - country
+      properties:
+        id:
+          type: string
+        id_client:
+          type: string
+        street:
+          type: string
+        door_number:
+          type: string
+        zip_code:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+   
+    ClientWalletSchema:
+      type: object
+      required:
+        - balance
+        - coin
+      properties:
+        id:
+          type: string
+        id_client:
+          type: string
+        balance:
+          type: number
+          format: double
+        coin:
+          type: string
+          format: byte
+    
+    InvoiceSchema:
+      type: object
+      required:
+        - id
+        - id_client
+        - purchase_date
+        - vat_id
+        - games
+      properties:
+        id:
+          type: string
+        id_client:
+          type: string
+        purchase_date:
+          type: string
+          format: date-time
+        vat_id:
+          type: integer
+        games:
+          type: array
+          items:
+            type: object
+            required:
+              - id_game
+              - price
+              - discount
+            properties:
+              id_game:
+                type: string
+              price:
+                type: number
+                format: double
+              discount:
+                type: number
+                format: double
+    
+    ReviewSchema:
+      type: object
+      properties:
+        id:
+          type: string
+        id_game:
+          type: string
+        id_client:
+          type: string
+        stars:
+          type: integer
+        review:
+          type: string
+    
+    SearchSchema:
+      type: object
+      required:
+        - id
+        - id_game
+        - id_client
+        - date_time
+      properties:
+        id:
+          type: string
+        id_game:
+          type: string
+        id_client:
+          type: string
+        date_time:
+          type: string
+          format: date-time
+  
+    TagSchema:
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+  
+    NewsletterSchema:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+    
+    VersionSchema:
+      type: object
+      required:
+        - version
+        - notes  
+      properties:
+        version:
+          type: string
+        notes:
+          type: string
+    
+    ErrorSchema:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
