@@ -18,6 +18,12 @@ docker-compose down -v
 docker-compose up
 ```
 
+## API
+
+### Documentation
+
+[http://localhost:8080/docs](http://localhost:8080/docs)
+
 ## Others
 
 ### Access database manually
