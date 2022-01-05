@@ -1894,7 +1894,7 @@ paths:
                 error: "email already subscribed: [email]"
                 
     get:
-      summary: "Gets the list of email subscribed to the newsletter"
+      summary: "Gets the list of emails subscribed to the newsletter"
       tags:
         - Newsletter
       responses:
@@ -1943,7 +1943,7 @@ paths:
   
   /sendNewsletter:
     post:
-      summary: "Sends a newsletter to all registered e-mails"
+      summary: "Sends a newsletter to all registered emails"
       tags:
         - Newsletter
       requestBody:
