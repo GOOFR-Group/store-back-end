@@ -8,12 +8,12 @@ WORKDIR /app
 
 COPY . .
 
-RUN go build -v -o dist/store ./cmd
+RUN go build -o dist/store ./cmd
 
 FROM alpine:3.13
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /app/dist/store /go/bin/store
 COPY --from=builder /app/internal/oapi/store.yaml /go/static/docs/
+COPY --from=builder /app/dist/store /go/bin/store
 
 ENTRYPOINT ["/go/bin/store"]
