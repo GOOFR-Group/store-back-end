@@ -8,6 +8,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/go-openapi/runtime v0.21.0
 	github.com/gocraft/dbr/v2 v2.7.3
+	github.com/google/uuid v1.1.1
 	github.com/lib/pq v1.10.4
 	github.com/rs/cors v1.8.2
 	github.com/rs/zerolog v1.26.1
