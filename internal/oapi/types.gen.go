@@ -107,6 +107,12 @@ type NewStoreSchema struct {
 	New      []GameSchema `json:"new"`
 }
 
+// NewsletterBodySchema defines model for NewsletterBodySchema.
+type NewsletterBodySchema struct {
+	Games []GameSchema `json:"games"`
+	Title string       `json:"title"`
+}
+
 // NewsletterSchema defines model for NewsletterSchema.
 type NewsletterSchema struct {
 	Email string `json:"email"`
@@ -440,6 +446,9 @@ type GetSearchTagParams struct {
 	Search string `json:"search"`
 }
 
+// PostSendNewsletterJSONBody defines parameters for PostSendNewsletter.
+type PostSendNewsletterJSONBody NewsletterBodySchema
+
 // DeleteTagParams defines parameters for DeleteTag.
 type DeleteTagParams struct {
 	// Tag ID
@@ -541,6 +550,9 @@ type PostReviewJSONRequestBody PostReviewJSONBody
 
 // PutReviewJSONRequestBody defines body for PutReview for application/json ContentType.
 type PutReviewJSONRequestBody PutReviewJSONBody
+
+// PostSendNewsletterJSONRequestBody defines body for PostSendNewsletter for application/json ContentType.
+type PostSendNewsletterJSONRequestBody PostSendNewsletterJSONBody
 
 // PostTagJSONRequestBody defines body for PostTag for application/json ContentType.
 type PostTagJSONRequestBody PostTagJSONBody

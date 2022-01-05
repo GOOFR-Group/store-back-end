@@ -1782,6 +1782,30 @@ paths:
               example:
                 error: "email not yet subscribed: [email]"
   
+  /sendNewsletter:
+    post:
+      summary: "Sends a newsletter to all registered e-mails"
+      tags:
+        - Newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsletterBodySchema'
+      responses:
+        '201': 
+          description: "successfully sent"
+        
+        '400':
+          description: "bad request"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "error parsing request: [error]"
+  
   # Statistics
   
   /topReviews:
@@ -2106,6 +2130,19 @@ components:
       properties:
         email:
           type: string
+    
+    NewsletterBodySchema:
+      type: object
+      required:
+        - title
+        - games
+      properties:
+        title:
+          type: string
+        games:
+          type: array
+          items: 
+            $ref: '#/components/schemas/GameSchema'
     
     VersionSchema:
       type: object

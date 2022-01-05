@@ -145,6 +145,9 @@ type ServerInterface interface {
 	// Search tags
 	// (GET /searchTag)
 	GetSearchTag(w http.ResponseWriter, r *http.Request, params GetSearchTagParams)
+	// Sends a newsletter to all registered e-mails
+	// (POST /sendNewsletter)
+	PostSendNewsletter(w http.ResponseWriter, r *http.Request)
 	// Deletes a tag
 	// (DELETE /tag)
 	DeleteTag(w http.ResponseWriter, r *http.Request, params DeleteTagParams)
@@ -1632,6 +1635,21 @@ func (siw *ServerInterfaceWrapper) GetSearchTag(w http.ResponseWriter, r *http.R
 	handler(w, r.WithContext(ctx))
 }
 
+// PostSendNewsletter operation middleware
+func (siw *ServerInterfaceWrapper) PostSendNewsletter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostSendNewsletter(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
 // DeleteTag operation middleware
 func (siw *ServerInterfaceWrapper) DeleteTag(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -2234,6 +2252,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/searchTag", wrapper.GetSearchTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/sendNewsletter", wrapper.PostSendNewsletter)
 	})
 	r.Group(func(r chi.Router) {
 		r.Delete(options.BaseURL+"/tag", wrapper.DeleteTag)

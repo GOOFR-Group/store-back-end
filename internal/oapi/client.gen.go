@@ -244,6 +244,11 @@ type ClientInterface interface {
 	// GetSearchTag request
 	GetSearchTag(ctx context.Context, params *GetSearchTagParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostSendNewsletter request with any body
+	PostSendNewsletterWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostSendNewsletter(ctx context.Context, body PostSendNewsletterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// DeleteTag request
 	DeleteTag(ctx context.Context, params *DeleteTagParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -934,6 +939,30 @@ func (c *Client) PostSearchHistory(ctx context.Context, params *PostSearchHistor
 
 func (c *Client) GetSearchTag(ctx context.Context, params *GetSearchTagParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSearchTagRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSendNewsletterWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSendNewsletterRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSendNewsletter(ctx context.Context, body PostSendNewsletterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSendNewsletterRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -3143,6 +3172,46 @@ func NewGetSearchTagRequest(server string, params *GetSearchTagParams) (*http.Re
 	return req, nil
 }
 
+// NewPostSendNewsletterRequest calls the generic PostSendNewsletter builder with application/json body
+func NewPostSendNewsletterRequest(server string, body PostSendNewsletterJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostSendNewsletterRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostSendNewsletterRequestWithBody generates requests for PostSendNewsletter with any type of body
+func NewPostSendNewsletterRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/sendNewsletter")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewDeleteTagRequest generates requests for DeleteTag
 func NewDeleteTagRequest(server string, params *DeleteTagParams) (*http.Request, error) {
 	var err error
@@ -3851,6 +3920,11 @@ type ClientWithResponsesInterface interface {
 
 	// GetSearchTag request
 	GetSearchTagWithResponse(ctx context.Context, params *GetSearchTagParams, reqEditors ...RequestEditorFn) (*GetSearchTagResponse, error)
+
+	// PostSendNewsletter request with any body
+	PostSendNewsletterWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSendNewsletterResponse, error)
+
+	PostSendNewsletterWithResponse(ctx context.Context, body PostSendNewsletterJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSendNewsletterResponse, error)
 
 	// DeleteTag request
 	DeleteTagWithResponse(ctx context.Context, params *DeleteTagParams, reqEditors ...RequestEditorFn) (*DeleteTagResponse, error)
@@ -4905,6 +4979,28 @@ func (r GetSearchTagResponse) StatusCode() int {
 	return 0
 }
 
+type PostSendNewsletterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *ErrorSchema
+}
+
+// Status returns HTTPResponse.Status
+func (r PostSendNewsletterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostSendNewsletterResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type DeleteTagResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -5638,6 +5734,23 @@ func (c *ClientWithResponses) GetSearchTagWithResponse(ctx context.Context, para
 		return nil, err
 	}
 	return ParseGetSearchTagResponse(rsp)
+}
+
+// PostSendNewsletterWithBodyWithResponse request with arbitrary body returning *PostSendNewsletterResponse
+func (c *ClientWithResponses) PostSendNewsletterWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSendNewsletterResponse, error) {
+	rsp, err := c.PostSendNewsletterWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSendNewsletterResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostSendNewsletterWithResponse(ctx context.Context, body PostSendNewsletterJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSendNewsletterResponse, error) {
+	rsp, err := c.PostSendNewsletter(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSendNewsletterResponse(rsp)
 }
 
 // DeleteTagWithResponse request returning *DeleteTagResponse
@@ -7216,6 +7329,32 @@ func ParseGetSearchTagResponse(rsp *http.Response) (*GetSearchTagResponse, error
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostSendNewsletterResponse parses an HTTP response from a PostSendNewsletterWithResponse call
+func ParsePostSendNewsletterResponse(rsp *http.Response) (*PostSendNewsletterResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostSendNewsletterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorSchema
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	}
 

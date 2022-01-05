@@ -19,3 +19,7 @@ func (*StoreImpl) GetNewsletter(w http.ResponseWriter, r *http.Request) {
 // DeleteNewsletter handles the /newsletter Delete endpoint
 func (*StoreImpl) DeleteNewsletter(w http.ResponseWriter, r *http.Request, params oapi.DeleteNewsletterParams) {
 }
+
+// PostSendNewsletter handles the /sendNewsletter Post endpoint
+func (*StoreImpl) PostSendNewsletter(w http.ResponseWriter, r *http.Request) {
+}
