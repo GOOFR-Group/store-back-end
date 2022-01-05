@@ -5,6 +5,13 @@
 ### Build & Run (using docker-compose)
 
 ```bash
+# init swarm
+docker swarm init
+# db secrets
+echo "password" | docker secret create postgres_password - 
+# api secrets
+echo "email" | docker secret create smtp_email - 
+echo "password" | docker secret create smtp_password - 
 # build containers and deploy
 docker-compose up --build
 ```

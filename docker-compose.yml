@@ -11,7 +11,7 @@ services:
     environment:
       - POSTGRES_DB=store_db
       - POSTGRES_USER=goofr
-      - POSTGRES_PASSWORD=goofr
+      - POSTGRES_PASSWORD=/run/secrets/postgres_password
     volumes:
       - database-data:/var/lib/postgresql/data
       - $PWD/tools/db/initdb/.:/docker-entrypoint-initdb.d/
@@ -47,8 +47,10 @@ services:
       - DB_PORT=5432
       - DB_NAME=store_db
       - DB_USER=goofr
-      - DB_PASSWORD=goofr
+      - DB_PASSWORD=/run/secrets/postgres_password
       - DB_SSLMODE=disable
+      - SMTP_EMAIL=/run/secrets/smtp_email
+      - SMTP_PASSWORD=/run/secrets/smtp_password
     restart: unless-stopped
 
 volumes:
