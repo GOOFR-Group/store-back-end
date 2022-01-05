@@ -58,6 +58,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -81,6 +84,9 @@ paths:
           required: false
           description: "Tag ids"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -104,6 +110,9 @@ paths:
           required: false
           description: "Tag ids"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -125,6 +134,9 @@ paths:
             schema:
               $ref: '#/components/schemas/GameSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -163,6 +175,9 @@ paths:
           required: false
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -199,6 +214,9 @@ paths:
             schema:
               $ref: '#/components/schemas/GameSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -236,6 +254,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -271,6 +292,9 @@ paths:
           required: true
           description: "Tag ID"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -304,6 +328,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -340,6 +367,9 @@ paths:
           required: true
           description: "Tag ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -375,6 +405,9 @@ paths:
           required: true
           description: "Image URL"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -399,6 +432,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -429,6 +465,9 @@ paths:
           required: true
           description: "Image ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -459,6 +498,9 @@ paths:
             schema:
               $ref: '#/components/schemas/PublisherSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -488,6 +530,9 @@ paths:
           required: false
           description: "Publisher ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -524,6 +569,9 @@ paths:
             schema:
               $ref: '#/components/schemas/PublisherSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -561,6 +609,9 @@ paths:
           required: true
           description: "Publisher ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -590,6 +641,9 @@ paths:
           required: true
           description: "Publisher ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -624,6 +678,9 @@ paths:
           required: false
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -660,6 +717,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -697,6 +757,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -727,6 +790,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientAccessSchema'
       responses:
+        '500':
+          description: internal server error
+
         '201': 
           description: "successfully logged in"
         
@@ -760,6 +826,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientAccessSchema'
       responses:
+        '500':
+          description: internal server error
+
         '201': 
           description: "successfully created"
         
@@ -800,6 +869,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientAccessSchema'
       responses:
+        '500':
+          description: internal server error
+
         '204':
           description: "successfully updated"
                 
@@ -836,6 +908,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -870,6 +945,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientAddressSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -910,6 +988,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -944,6 +1025,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientWalletSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -989,6 +1073,9 @@ paths:
           required: true
           description: "Amount to add"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1035,6 +1122,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -1068,6 +1158,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1105,6 +1198,9 @@ paths:
           required: false
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1134,6 +1230,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1180,6 +1279,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -1213,6 +1315,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1250,6 +1355,9 @@ paths:
           required: false
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1281,6 +1389,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1314,6 +1425,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1346,6 +1460,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ReviewSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -1398,6 +1515,9 @@ paths:
             schema:
               $ref: '#/components/schemas/ReviewSchema'
       responses:
+        '500':
+          description: internal server error
+
         '200':
           description: "successful operation"
           content:
@@ -1435,6 +1555,9 @@ paths:
           required: true
           description: "Review ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1464,6 +1587,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1497,6 +1623,9 @@ paths:
           required: true
           description: "Search query"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1519,6 +1648,9 @@ paths:
           required: true
           description: "Search query"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1547,6 +1679,9 @@ paths:
           required: true
           description: "Game ID"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -1571,6 +1706,9 @@ paths:
           required: true
           description: "Client ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1603,6 +1741,9 @@ paths:
             schema:
               $ref: '#/components/schemas/TagSchema'
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully created"
                 
@@ -1628,6 +1769,9 @@ paths:
           required: false
           description: "Tag ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1664,6 +1808,9 @@ paths:
             schema:
               $ref: '#/components/schemas/TagSchema'
       responses:
+        '500':
+          description: internal server error
+
         '204':
           description: "successfully updated"
                 
@@ -1697,6 +1844,9 @@ paths:
           required: true
           description: "Tag ID"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1728,6 +1878,9 @@ paths:
           required: true
           description: "Email to subscribe"
       responses:
+        '500':
+          description: internal server error
+
         '201':
           description: "successfully subscribed"
         
@@ -1745,6 +1898,9 @@ paths:
       tags:
         - Newsletter
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1766,6 +1922,9 @@ paths:
           required: true
           description: "Email to unsubscribe"
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
@@ -1794,6 +1953,9 @@ paths:
             schema:
               $ref: '#/components/schemas/NewsletterBodySchema'
       responses:
+        '500':
+          description: internal server error
+
         '201': 
           description: "successfully sent"
         
@@ -1814,6 +1976,9 @@ paths:
       tags:
         - Statistics
       responses:
+        '500':
+          description: internal server error
+
         '200': 
           description: "successful operation"
           content:
