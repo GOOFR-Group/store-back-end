@@ -10,7 +10,6 @@ const handlerTag = "tag"
 
 // PostTag handles the /tag Post endpoint
 func (*StoreImpl) PostTag(w http.ResponseWriter, r *http.Request) {
-	// logging.AppLogger.Error().Str(logHandlerKey, handlerTag).Str(logErrorKey, ErrWritingResponse).Msg(err.Error())
 }
 
 // GetTag handles the /tag Get endpoint
