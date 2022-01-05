@@ -71,10 +71,11 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 // PutTag updates a tag
 func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
+		var id uuid.UUID
 		var err error
 		var ok bool
 
-		id, err := uuid.Parse(params.Id)
+		id, err = uuid.Parse(params.Id)
 		if err != nil {
 			return err
 		}
@@ -83,6 +84,14 @@ func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
 			ID:   id,
 			Name: req.Name,
 		})
+		if err != nil {
+			return err
+		}
+		if !ok {
+			return ErrObjectNotFound
+		}
+
+		_, ok, err = storage.GetTagByID(tx, id)
 		if err != nil {
 			return err
 		}
