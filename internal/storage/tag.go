@@ -13,7 +13,7 @@ type Tag struct {
 	Name string    `db:"name"`
 }
 
-func CreateNewTag(t Transaction, model Tag) error {
+func CreateTag(t Transaction, model Tag) error {
 	_, err := t.InsertInto(TagTable).
 		Columns(TagIDDb, TagNameDb).
 		Record(model).
@@ -22,7 +22,7 @@ func CreateNewTag(t Transaction, model Tag) error {
 	return err
 }
 
-func GetAllTags(t Transaction) (objects []Tag, err error) {
+func ReadAllTags(t Transaction) (objects []Tag, err error) {
 	_, err = t.Select("*").
 		From(TagTable).
 		Load(&objects)
@@ -30,7 +30,7 @@ func GetAllTags(t Transaction) (objects []Tag, err error) {
 	return
 }
 
-func GetTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
+func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	err = t.Select("*").
 		From(TagTable).
 		Where(TagIDDb+" = ?", id).
