@@ -43,7 +43,6 @@ storage:
 oapi-codegen:
 	oapi-codegen --package ${CODEGEN_PACKAGE} -generate types,skip-prune ${CODEGEN_PATH}/store.yaml > ${CODEGEN_PATH}/types.gen.go
 	oapi-codegen --package ${CODEGEN_PACKAGE} -generate chi-server  ${CODEGEN_PATH}/store.yaml > ${CODEGEN_PATH}/server.gen.go
-	oapi-codegen --package ${CODEGEN_PACKAGE} -generate client  ${CODEGEN_PATH}/store.yaml > ${CODEGEN_PATH}/client.gen.go
 	oapi-codegen --package ${CODEGEN_PACKAGE} -generate spec  ${CODEGEN_PATH}/store.yaml > ${CODEGEN_PATH}/spec.gen.go
 
 # Tools
