@@ -30,6 +30,7 @@ func RunServer(ctx context.Context) error {
 	conf.InitApp()
 	conf.InitServer()
 	conf.InitDB()
+	conf.InitSMTP()
 	conf.InitRouter()
 	storage.InitStorage()
 
