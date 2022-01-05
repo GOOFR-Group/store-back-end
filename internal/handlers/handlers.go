@@ -4,11 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-)
 
-const (
-	logHandlerKey = "handler"
-	logErrorKey   = "error"
+	"github.com/GOOFR-Group/store-back-end/internal/logging"
 )
 
 const (
@@ -41,4 +38,8 @@ func writeResponse(w http.ResponseWriter, response interface{}, statusCode int, 
 	}
 
 	return nil
+}
+
+func logInternalError(handlerName string, errorName string, err error) {
+	logging.AppLogger.Error().Str("handler", handlerName).Str("error", ErrWritingResponse).Msg(err.Error())
 }
