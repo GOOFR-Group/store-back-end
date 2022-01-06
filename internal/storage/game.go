@@ -3,6 +3,7 @@ package storage
 import (
 	"time"
 
+	"github.com/gocraft/dbr/v2"
 	"github.com/google/uuid"
 )
 
@@ -22,11 +23,76 @@ type Game struct {
 	DownloadLink string    `db:"download_link"`
 }
 
+func CreateGame(t Transaction, model Game) error {
+	_, err := t.InsertInto(GameTable).
+		Columns(GameIDDb, GameIDPublisherDb, GameNameDb, GamePriceDb, GameDiscountDb, GameStateDb, GameCoverImageDb, GameReleaseDateDb, GameDescriptionDb, GameDownloadLinkDb).
+		Record(model).
+		Exec()
+
+	return err
+}
+
+func ReadGames(t Transaction) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		Load(&objects)
+
+	return
+}
+
 func ReadGamesByPublisherID(t Transaction, id uuid.UUID) (objects []Game, err error) {
 	_, err = t.Select("*").
 		From(GameTable).
 		Where(GameIDPublisherDb+" = ?", id).
 		Load(&objects)
 
+	return
+}
+
+func ReadGameByID(t Transaction, id uuid.UUID) (object Game, ok bool, err error) {
+	err = t.Select("*").
+		From(GameTable).
+		Where(GameIDDb+" = ?", id).
+		LoadOne(&object)
+
+	switch err {
+	case nil:
+		ok = true
+	case dbr.ErrNotFound:
+		err = nil
+	}
+	return
+}
+
+func UpdateGameByID(t Transaction, model Game) error {
+	_, err := t.Update(GameTable).
+		SetMap(map[string]interface{}{
+			GameIDPublisherDb:  model.IDPublisher,
+			GameNameDb:         model.Name,
+			GamePriceDb:        model.Price,
+			GameDiscountDb:     model.Discount,
+			GameStateDb:        model.State,
+			GameCoverImageDb:   model.CoverImage,
+			GameReleaseDateDb:  model.ReleaseDate,
+			GameDescriptionDb:  model.Description,
+			GameDownloadLinkDb: model.DownloadLink,
+		}).
+		Where(GameIDDb+" = ?", model.ID).
+		Exec()
+
+	return err
+}
+
+func DeleteGameByID(t Transaction, id uuid.UUID) (ok bool, err error) {
+	_, err = t.DeleteFrom(GameTable).
+		Where(GameIDDb+" = ?", id).
+		Exec()
+
+	switch err {
+	case nil:
+		ok = true
+	case dbr.ErrNotFound:
+		err = nil
+	}
 	return
 }
