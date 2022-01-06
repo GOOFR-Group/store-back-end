@@ -15,7 +15,7 @@ type Transaction dbr.SessionRunner
 
 // InitStorage starts a new database connection
 func InitStorage() {
-	dbConn, err := newConnection(conf.GetDbConnectionString())
+	dbConn, err := newConnection(conf.DbConnectionString())
 	if err != nil {
 		logging.AppLogger.Fatal().Msgf("Could not initialize storage - failed to open connection to database - %v", err)
 

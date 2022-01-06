@@ -39,7 +39,7 @@ func InitDB() {
 	})
 }
 
-// GetDbConnectionString retrieves the configured database connection string
-func GetDbConnectionString() string {
+// DbConnectionString retrieves the configured database connection string
+func DbConnectionString() string {
 	return dbConfiguration.DbConnectionString
 }
