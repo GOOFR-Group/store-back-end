@@ -1967,6 +1967,15 @@ paths:
                 $ref: '#/components/schemas/ErrorSchema'
               example:
                 error: "error parsing request: [error]"
+                
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "one of the publishers sent were not found"
   
   # Statistics
   
