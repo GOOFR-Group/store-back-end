@@ -5,13 +5,16 @@
 ### Build & Run (using docker-compose)
 
 ```bash
-# init swarm
-docker swarm init
-# db secrets
-echo "password" | docker secret create postgres_password - 
-# api secrets
-echo "email" | docker secret create smtp_email - 
-echo "password" | docker secret create smtp_password - 
+# create `secrets` directory
+mkdir secrets 
+
+# create secrets
+echo 'db_password' > secrets/postgres_password.txt
+echo 'email' > secrets/smtp_email.txt
+echo 'email_password' > secrets/smtp_password.txt
+```
+
+```bash
 # build containers and deploy
 docker-compose up --build
 ```
@@ -21,6 +24,7 @@ docker-compose up --build
 ```bash
 # drops the volumes attached to the containers
 docker-compose down -v
+
 # brings up the containers
 docker-compose up
 ```
