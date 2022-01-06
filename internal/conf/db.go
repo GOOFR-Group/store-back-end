@@ -1,6 +1,9 @@
 package conf
 
-import "github.com/GOOFR-Group/store-back-end/internal/utils/postgresql"
+import (
+	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
+	"github.com/GOOFR-Group/store-back-end/internal/utils/postgresql"
+)
 
 const (
 	DBHost    = "DB_HOST"
@@ -8,6 +11,9 @@ const (
 	DBUser    = "DB_USER"
 	DBPort    = "DB_PORT"
 	DBSSLMode = "DB_SSLMODE"
+
+	DBPassword     = "DB_PASSWORD"
+	DBPasswordFile = "DB_PASSWORD_FILE"
 )
 
 const (
@@ -22,6 +28,8 @@ var dbConfiguration postgresql.Configuration
 
 // InitDB starts the database configuration
 func InitDB() {
+	env.CreateEnvValueFromEnvFile(DBPassword, DBPasswordFile, true)
+
 	dbConfiguration = postgresql.LoadConfigurationFromEnv(postgresql.Defaults{
 		DBHost:    DefaultDBHost,
 		DBName:    DefaultDBName,
