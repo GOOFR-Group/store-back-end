@@ -40,7 +40,7 @@ docker-compose up
 
 [http://localhost:8080/docs](http://localhost:8080/docs)
 
-## Others
+## Others 
 
 ### Access database manually
 
