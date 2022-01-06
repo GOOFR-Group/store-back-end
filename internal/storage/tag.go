@@ -30,6 +30,16 @@ func ReadTags(t Transaction) (objects []Tag, err error) {
 	return
 }
 
+func ReadTagsByGameID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
+	_, err = t.Select(TagTable+".*").
+		From(TagTable).
+		Join(TagGameTable, TagTable+"."+TagIDDb+" = "+TagGameTable+"."+TagGameIDTagDb).
+		Where(TagGameTable+"."+TagGameIDGameDb+" = ?", id).
+		Load(&objects)
+
+	return
+}
+
 func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	err = t.Select("*").
 		From(TagTable).
