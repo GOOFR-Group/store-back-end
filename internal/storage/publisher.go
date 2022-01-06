@@ -50,7 +50,7 @@ func ReadPublisherByID(t Transaction, id uuid.UUID) (object Publisher, ok bool, 
 func ReadPublisherGamesByID(t Transaction, id uuid.UUID) (objects []Game, err error) {
 	_, err = t.Select(GameTable+".*").
 		From(PublisherTable).
-		Join(GameTable, PublisherTable+"."+PublisherIDDb+" = "+GameTable+"."+GameIDPublisherDb).
+		Join(GameTable, PublisherTable+"."+PublisherIDDb+" = "+GameTable+"."+GameIDDb).
 		Load(&objects)
 
 	return

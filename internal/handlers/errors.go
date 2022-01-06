@@ -10,11 +10,6 @@ const (
 	ErrParsingRequest = `error parsing request: %s`
 )
 
-// publisher
-const (
-	ErrPublisherNotFound = `publisher not found with ID: %s`
-)
-
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`
