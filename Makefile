@@ -31,10 +31,10 @@ get-oapi:
 
 # Generators
 
-# generate constants for each struct field tag matching database table columns
 .PHONY: generate
 generate: storage oapi-codegen
 
+# generate constants for each struct field tag matching database table columns
 .PHONY: storage
 storage:
 	go generate internal/storage/storage.go

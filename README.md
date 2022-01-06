@@ -2,7 +2,12 @@
 
 ## Quickstart
 
-### Build & Run (using docker-compose)
+### Build & Run
+
+```bash
+# vendors the dependencies
+make mod
+```
 
 ```bash
 # create `secrets` directory
