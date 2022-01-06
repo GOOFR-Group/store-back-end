@@ -22,7 +22,7 @@ func CreateTag(t Transaction, model Tag) error {
 	return err
 }
 
-func ReadTags(t Transaction) (objects []Tag, err error) {
+func ReadAllTags(t Transaction) (objects []Tag, err error) {
 	_, err = t.Select("*").
 		From(TagTable).
 		Load(&objects)

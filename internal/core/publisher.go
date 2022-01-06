@@ -55,7 +55,7 @@ func GetPublisher(params oapi.GetPublisherParams) ([]oapi.PublisherSchema, error
 		var err error
 
 		if params.Id == nil {
-			if objects, err = storage.ReadPublishers(tx); err != nil {
+			if objects, err = storage.ReadAllPublishers(tx); err != nil {
 				return err
 			}
 		} else {
@@ -181,7 +181,7 @@ func GetPublisherGames(params oapi.GetPublisherGamesParams) ([]oapi.GameSchema, 
 			return ErrObjectNotFound
 		}
 
-		objects, err = storage.ReadGamesByPublisherID(tx, id)
+		objects, err = storage.ReadPublisherGamesByID(tx, id)
 		if err != nil {
 			return err
 		}

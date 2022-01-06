@@ -48,7 +48,7 @@ func GetNewsletter() ([]oapi.NewsletterSchema, error) {
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
-		objects, err = storage.ReadNewsletters(tx)
+		objects, err = storage.ReadAllNewsletters(tx)
 
 		return err
 	}); err != nil {
@@ -96,7 +96,7 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
-		objects, err = storage.ReadNewsletters(tx)
+		objects, err = storage.ReadAllNewsletters(tx)
 
 		return err
 	}); err != nil {
