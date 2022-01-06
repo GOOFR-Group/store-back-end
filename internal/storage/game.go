@@ -21,3 +21,12 @@ type Game struct {
 	Description  string    `db:"description"`
 	DownloadLink string    `db:"download_link"`
 }
+
+func ReadGamesByPublisherID(t Transaction, id uuid.UUID) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameIDPublisherDb+" = ?", id).
+		Load(&objects)
+
+	return
+}
