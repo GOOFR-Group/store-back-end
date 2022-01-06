@@ -110,8 +110,9 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 		to = append(to, e.Email)
 	}
 
+	title := "GOOFR Store - " + req.Title
 	body := `<html> <body style="background-color: #0D1B2A; font-family: sans-serif; padding-top: 20px; padding-bottom: 20px;">`
-	body += `<h1 style="text-align: center; color: #778DA9;">` + req.Title + `</h1> <hr style="border-color: #778DA9;"> <br>`
+	body += `<h1 style="text-align: center; color: #778DA9;">` + title + `</h1> <hr style="border-color: #778DA9;"> <br>`
 	for _, g := range req.Games {
 		year, month, day := g.ReleaseDate.Date()
 
@@ -128,7 +129,7 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 	}
 	body += `</body> </html>`
 
-	message := []byte(fmt.Sprintf(smtpSubject, req.Title) + smtpMIME + body)
+	message := []byte(fmt.Sprintf(smtpSubject, title) + smtpMIME + body)
 	return smtp.SendMail(conf.SMTPAddress(), conf.SMTPAuthentication(), conf.SMTPEmailAddress(), to, message)
 }
 
