@@ -45,21 +45,15 @@ func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	return
 }
 
-func UpdateTagByID(t Transaction, model Tag) (ok bool, err error) {
-	_, err = t.Update(TagTable).
+func UpdateTagByID(t Transaction, model Tag) error {
+	_, err := t.Update(TagTable).
 		SetMap(map[string]interface{}{
 			TagNameDb: model.Name,
 		}).
 		Where(TagIDDb+" = ?", model.ID).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }
 
 func DeleteTagByID(t Transaction, id uuid.UUID) (ok bool, err error) {

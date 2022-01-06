@@ -80,15 +80,12 @@ func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
 			return err
 		}
 
-		ok, err = storage.UpdateTagByID(tx, storage.Tag{
+		err = storage.UpdateTagByID(tx, storage.Tag{
 			ID:   id,
 			Name: req.Name,
 		})
 		if err != nil {
 			return err
-		}
-		if !ok {
-			return ErrObjectNotFound
 		}
 
 		_, ok, err = storage.ReadTagByID(tx, id)
