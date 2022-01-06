@@ -20,7 +20,7 @@ func PostPublisher(req oapi.PostPublisherJSONRequestBody) (oapi.PublisherSchema,
 	}
 
 	if err = handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		if err := storage.CreatePublisher(tx, storage.Publisher{
+		if err = storage.CreatePublisher(tx, storage.Publisher{
 			ID:          id,
 			Name:        req.Name,
 			CoverImage:  req.CoverImage,
@@ -31,8 +31,8 @@ func PostPublisher(req oapi.PostPublisherJSONRequestBody) (oapi.PublisherSchema,
 		}
 
 		var ok bool
-		object, ok, err = storage.ReadPublisherByID(tx, id)
-		if err != nil {
+
+		if object, ok, err = storage.ReadPublisherByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
@@ -59,15 +59,16 @@ func GetPublisher(params oapi.GetPublisherParams) ([]oapi.PublisherSchema, error
 				return err
 			}
 		} else {
-			id, err := uuid.Parse(*params.Id)
-			if err != nil {
+			var id uuid.UUID
+
+			if id, err = uuid.Parse(*params.Id); err != nil {
 				return err
 			}
 
 			var object storage.Publisher
 			var ok bool
-			object, ok, err = storage.ReadPublisherByID(tx, id)
-			if err != nil {
+
+			if object, ok, err = storage.ReadPublisherByID(tx, id); err != nil {
 				return err
 			}
 			if !ok {
@@ -87,31 +88,29 @@ func GetPublisher(params oapi.GetPublisherParams) ([]oapi.PublisherSchema, error
 
 // PutPublisher updates a publisher
 func PutPublisher(params oapi.PutPublisherParams, req oapi.PutPublisherJSONRequestBody) (oapi.PublisherSchema, error) {
+	var id uuid.UUID
+	var err error
+
+	if id, err = uuid.Parse(params.Id); err != nil {
+		return oapi.PublisherSchema{}, err
+	}
+
 	var object storage.Publisher
 
-	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		var id uuid.UUID
-		var err error
-		var ok bool
-
-		id, err = uuid.Parse(params.Id)
-		if err != nil {
-			return err
-		}
-
-		err = storage.UpdatePublisherByID(tx, storage.Publisher{
+	if err = handleTransaction(nil, func(tx dbr.SessionRunner) error {
+		if err = storage.UpdatePublisherByID(tx, storage.Publisher{
 			ID:          id,
 			Name:        req.Name,
 			CoverImage:  req.CoverImage,
 			PhoneNumber: req.PhoneNumber,
 			Email:       req.Email,
-		})
-		if err != nil {
+		}); err != nil {
 			return err
 		}
 
-		object, ok, err = storage.ReadPublisherByID(tx, id)
-		if err != nil {
+		var ok bool
+
+		if object, ok, err = storage.ReadPublisherByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
@@ -128,27 +127,26 @@ func PutPublisher(params oapi.PutPublisherParams, req oapi.PutPublisherJSONReque
 
 // DeletePublisher deletes a publisher
 func DeletePublisher(params oapi.DeletePublisherParams) (oapi.PublisherSchema, error) {
+	var id uuid.UUID
+	var err error
+
+	if id, err = uuid.Parse(params.Id); err != nil {
+		return oapi.PublisherSchema{}, err
+	}
+
 	var object storage.Publisher
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		var err error
 		var ok bool
 
-		id, err := uuid.Parse(params.Id)
-		if err != nil {
-			return err
-		}
-
-		object, ok, err = storage.ReadPublisherByID(tx, id)
-		if err != nil {
+		if object, ok, err = storage.ReadPublisherByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
 			return ErrObjectNotFound
 		}
 
-		ok, err = storage.DeletePublisherByID(tx, id)
-		if err != nil {
+		if ok, err = storage.DeletePublisherByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
@@ -168,21 +166,23 @@ func GetPublisherGames(params oapi.GetPublisherGamesParams) ([]oapi.GameSchema, 
 	var objects []storage.Game
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		id, err := uuid.Parse(params.Id)
-		if err != nil {
+		var id uuid.UUID
+		var err error
+
+		if id, err = uuid.Parse(params.Id); err != nil {
 			return err
 		}
 
-		_, ok, err := storage.ReadPublisherByID(tx, id)
-		if err != nil {
+		var ok bool
+
+		if _, ok, err = storage.ReadPublisherByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
 			return ErrObjectNotFound
 		}
 
-		objects, err = storage.ReadGamesByPublisherID(tx, id)
-		if err != nil {
+		if objects, err = storage.ReadGamesByPublisherID(tx, id); err != nil {
 			return err
 		}
 

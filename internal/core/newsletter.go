@@ -24,8 +24,10 @@ func PostNewsletter(params oapi.PostNewsletterParams) error {
 	}
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		_, ok, err := storage.ReadNewsletterByID(tx, params.Email)
-		if err != nil {
+		var ok bool
+		var err error
+
+		if _, ok, err = storage.ReadNewsletterByID(tx, params.Email); err != nil {
 			return err
 		}
 		if ok {
@@ -63,19 +65,17 @@ func DeleteNewsletter(params oapi.DeleteNewsletterParams) (oapi.NewsletterSchema
 	var object storage.Newsletter
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		var err error
 		var ok bool
+		var err error
 
-		object, ok, err = storage.ReadNewsletterByID(tx, params.Email)
-		if err != nil {
+		if object, ok, err = storage.ReadNewsletterByID(tx, params.Email); err != nil {
 			return err
 		}
 		if !ok {
 			return ErrObjectNotFound
 		}
 
-		ok, err = storage.DeleteNewsletterByID(tx, params.Email)
-		if err != nil {
+		if ok, err = storage.DeleteNewsletterByID(tx, params.Email); err != nil {
 			return err
 		}
 		if !ok {
@@ -112,19 +112,23 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 	}
 
 	title := "GOOFR Store - " + req.Title
+
 	body := `<html> <body style="background-color: #0D1B2A; font-family: sans-serif; padding-top: 20px; padding-bottom: 20px;">`
 	body += `<h1 style="text-align: center; color: #778DA9;">` + title + `</h1> <hr style="border-color: #778DA9;"> <br>`
+
+	var idPublisher uuid.UUID
+	var publisher storage.Publisher
+	var err error
+
 	for _, g := range req.Games {
-		var publisher storage.Publisher
-		idPublisher, err := uuid.Parse(g.IdPublisher)
-		if err != nil {
+		if idPublisher, err = uuid.Parse(g.IdPublisher); err != nil {
 			return err
 		}
 
-		if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
+		if err = handleTransaction(nil, func(tx dbr.SessionRunner) error {
 			var ok bool
-			publisher, ok, err = storage.ReadPublisherByID(tx, idPublisher)
-			if err != nil {
+
+			if publisher, ok, err = storage.ReadPublisherByID(tx, idPublisher); err != nil {
 				return err
 			}
 			if !ok {
@@ -148,6 +152,7 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%d/%d/%d</td> </tr>`, "Release Date", day, month, year)
 		body += `</table> </div> </div>`
 	}
+
 	body += `</body> </html>`
 
 	message := []byte(fmt.Sprintf(smtpSubject, title) + smtpMIME + body)

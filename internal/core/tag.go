@@ -42,15 +42,16 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 				return err
 			}
 		} else {
-			id, err := uuid.Parse(*params.Id)
-			if err != nil {
+			var id uuid.UUID
+
+			if id, err = uuid.Parse(*params.Id); err != nil {
 				return err
 			}
 
 			var object storage.Tag
 			var ok bool
-			object, ok, err = storage.ReadTagByID(tx, id)
-			if err != nil {
+
+			if object, ok, err = storage.ReadTagByID(tx, id); err != nil {
 				return err
 			}
 			if !ok {
@@ -70,26 +71,24 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 
 // PutTag updates a tag
 func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
+	var id uuid.UUID
+	var err error
+
+	if id, err = uuid.Parse(params.Id); err != nil {
+		return err
+	}
+
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		var id uuid.UUID
-		var err error
-		var ok bool
-
-		id, err = uuid.Parse(params.Id)
-		if err != nil {
-			return err
-		}
-
-		err = storage.UpdateTagByID(tx, storage.Tag{
+		if err = storage.UpdateTagByID(tx, storage.Tag{
 			ID:   id,
 			Name: req.Name,
-		})
-		if err != nil {
+		}); err != nil {
 			return err
 		}
 
-		_, ok, err = storage.ReadTagByID(tx, id)
-		if err != nil {
+		var ok bool
+
+		if _, ok, err = storage.ReadTagByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
@@ -106,27 +105,26 @@ func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
 
 // DeleteTag deletes a tag
 func DeleteTag(params oapi.DeleteTagParams) (oapi.TagSchema, error) {
+	var id uuid.UUID
+	var err error
+
+	if id, err = uuid.Parse(params.Id); err != nil {
+		return oapi.TagSchema{}, err
+	}
+
 	var object storage.Tag
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		var err error
 		var ok bool
 
-		id, err := uuid.Parse(params.Id)
-		if err != nil {
-			return err
-		}
-
-		object, ok, err = storage.ReadTagByID(tx, id)
-		if err != nil {
+		if object, ok, err = storage.ReadTagByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
 			return ErrObjectNotFound
 		}
 
-		ok, err = storage.DeleteTagByID(tx, id)
-		if err != nil {
+		if ok, err = storage.DeleteTagByID(tx, id); err != nil {
 			return err
 		}
 		if !ok {
