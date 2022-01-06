@@ -18,10 +18,10 @@ func (*StoreImpl) PostNewsletter(w http.ResponseWriter, r *http.Request, params 
 	switch err {
 	case nil:
 	case core.ErrObjectAlreadyCreated:
-		writeConflict(w, handlerNewsletter, fmt.Sprintf(ErrEmailAlreadySubscribed, params.Email))
+		writeConflict(w, handlerNewsletter, fmt.Sprintf(ErrNewsletterEmailAlreadySubscribed, params.Email))
 		return
 	case core.ErrInvalidEmail:
-		writeConflict(w, handlerNewsletter, fmt.Sprintf(ErrInvalidEmail, params.Email))
+		writeConflict(w, handlerNewsletter, fmt.Sprintf(ErrNewsletterInvalidEmail, params.Email))
 		return
 	default:
 		writeInternalServerError(w, handlerNewsletter, err)
@@ -50,7 +50,7 @@ func (*StoreImpl) DeleteNewsletter(w http.ResponseWriter, r *http.Request, param
 	switch err {
 	case nil:
 	case core.ErrObjectNotFound:
-		writeNotFound(w, handlerNewsletter, fmt.Sprintf(ErrEmailNotYetSubscribed, params.Email))
+		writeNotFound(w, handlerNewsletter, fmt.Sprintf(ErrNewsletterEmailNotYetSubscribed, params.Email))
 		return
 	default:
 		writeInternalServerError(w, handlerNewsletter, err)
@@ -78,6 +78,9 @@ func (*StoreImpl) PostSendNewsletter(w http.ResponseWriter, r *http.Request) {
 	err = core.PostSendNewsletter(req)
 	switch err {
 	case nil:
+	case core.ErrObjectNotFound:
+		writeNotFound(w, handlerNewsletter, ErrNewsletterPublisherNotFound)
+		return
 	default:
 		writeInternalServerError(w, handlerNewsletter, err)
 		return
