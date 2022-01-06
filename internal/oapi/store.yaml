@@ -793,8 +793,12 @@ paths:
         '500':
           description: internal server error
 
-        '201': 
-          description: "successfully logged in"
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSchema'
         
         '400':
           description: "bad request"
@@ -829,8 +833,12 @@ paths:
         '500':
           description: internal server error
 
-        '201': 
-          description: "successfully created"
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSchema'
         
         '400':
           description: "bad request"
