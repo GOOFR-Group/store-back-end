@@ -3,6 +3,7 @@ package storage
 import (
 	"time"
 
+	"github.com/GOOFR-Group/store-back-end/internal/utils/mathf"
 	"github.com/gocraft/dbr/v2"
 	"github.com/google/uuid"
 )
@@ -24,6 +25,7 @@ type Game struct {
 }
 
 func CreateGame(t Transaction, model Game) error {
+	model.Discount = mathf.Clamp(model.Discount, 0, 1)
 	_, err := t.InsertInto(GameTable).
 		Columns(GameIDDb, GameIDPublisherDb, GameNameDb, GamePriceDb, GameDiscountDb, GameStateDb, GameCoverImageDb, GameReleaseDateDb, GameDescriptionDb, GameDownloadLinkDb).
 		Record(model).
@@ -65,6 +67,7 @@ func ReadGameByID(t Transaction, id uuid.UUID) (object Game, ok bool, err error)
 }
 
 func UpdateGameByID(t Transaction, model Game) error {
+	model.Discount = mathf.Clamp(model.Discount, 0, 1)
 	_, err := t.Update(GameTable).
 		SetMap(map[string]interface{}{
 			GameIDPublisherDb:  model.IDPublisher,
