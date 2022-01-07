@@ -10,6 +10,22 @@ const (
 	ErrParsingRequest = `error parsing request: %s`
 )
 
+// game
+const (
+	ErrGameNotFound = `game not found with ID: %s`
+)
+
+// game tag
+const (
+	ErrGameAlreadyContainsTag = "game already contains the given tag"
+	ErrGameNotYetContainTag   = "game does not yet contain the given tag"
+)
+
+// game image
+const (
+	ErrImageNotFound = `image not found with ID: %s`
+)
+
 // publisher
 const (
 	ErrPublisherNotFound = `publisher not found with ID: %s`
