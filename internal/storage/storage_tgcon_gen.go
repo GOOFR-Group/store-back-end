@@ -28,15 +28,15 @@ const (
 	CartIDGameDb   = "id_game"
 
 	// --------------------  File: client.go  --------------------
-	// Struct: Round
-	RoundActiveDb      = "active"
-	RoundBirthdateDb   = "birthdate"
-	RoundIDDb          = "id"
-	RoundNameDb        = "name"
-	RoundPhoneNumberDb = "phone_number"
-	RoundPictureDb     = "picture"
-	RoundSurnameDb     = "surname"
-	RoundVatIDDb       = "vat_id"
+	// Struct: Client
+	ClientActiveDb      = "active"
+	ClientBirthdateDb   = "birthdate"
+	ClientIDDb          = "id"
+	ClientNameDb        = "name"
+	ClientPhoneNumberDb = "phone_number"
+	ClientPictureDb     = "picture"
+	ClientSurnameDb     = "surname"
+	ClientVatIDDb       = "vat_id"
 
 	// -------------  File: client_search_history.go  -------------
 	// Struct: ClientSearchHistory
