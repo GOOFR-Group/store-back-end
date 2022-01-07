@@ -384,7 +384,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
               example:
-                error: "game not found with ID: [id]"
+                error: "tag not found with ID: [id]"
   
   /gameImage:
     post:
