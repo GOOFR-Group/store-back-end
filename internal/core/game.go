@@ -131,7 +131,7 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 			return ErrPublisherNotFound
 		}
 
-		if err = storage.CreateGame(tx, storage.Game{
+		if err = storage.UpdateGameByID(tx, storage.Game{
 			ID:           id,
 			IDPublisher:  idPublisher,
 			Name:         req.Name,
