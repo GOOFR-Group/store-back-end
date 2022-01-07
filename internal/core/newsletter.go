@@ -75,11 +75,8 @@ func DeleteNewsletter(params oapi.DeleteNewsletterParams) (oapi.NewsletterSchema
 			return ErrObjectNotFound
 		}
 
-		if ok, err = storage.DeleteNewsletterByID(tx, params.Email); err != nil {
+		if err = storage.DeleteNewsletterByID(tx, params.Email); err != nil {
 			return err
-		}
-		if !ok {
-			return ErrObjectNotFound
 		}
 
 		return nil

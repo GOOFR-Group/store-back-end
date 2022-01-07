@@ -124,11 +124,8 @@ func DeleteTag(params oapi.DeleteTagParams) (oapi.TagSchema, error) {
 			return ErrObjectNotFound
 		}
 
-		if ok, err = storage.DeleteTagByID(tx, id); err != nil {
+		if err = storage.DeleteTagByID(tx, id); err != nil {
 			return err
-		}
-		if !ok {
-			return ErrObjectNotFound
 		}
 
 		return nil

@@ -86,16 +86,10 @@ func UpdateGameByID(t Transaction, model Game) error {
 	return err
 }
 
-func DeleteGameByID(t Transaction, id uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(GameTable).
+func DeleteGameByID(t Transaction, id uuid.UUID) error {
+	_, err := t.DeleteFrom(GameTable).
 		Where(GameIDDb+" = ?", id).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }

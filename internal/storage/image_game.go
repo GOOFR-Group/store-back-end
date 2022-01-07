@@ -47,16 +47,10 @@ func ReadImageGameByID(t Transaction, id uuid.UUID) (object ImageGame, ok bool, 
 	return
 }
 
-func DeleteImageGameByID(t Transaction, id uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(ImageGameTable).
+func DeleteImageGameByID(t Transaction, id uuid.UUID) error {
+	_, err := t.DeleteFrom(ImageGameTable).
 		Where(ImageGameIDDb+" = ?", id).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }

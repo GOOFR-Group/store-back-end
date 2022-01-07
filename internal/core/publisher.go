@@ -146,11 +146,8 @@ func DeletePublisher(params oapi.DeletePublisherParams) (oapi.PublisherSchema, e
 			return ErrObjectNotFound
 		}
 
-		if ok, err = storage.DeletePublisherByID(tx, id); err != nil {
+		if err = storage.DeletePublisherByID(tx, id); err != nil {
 			return err
-		}
-		if !ok {
-			return ErrObjectNotFound
 		}
 
 		return nil

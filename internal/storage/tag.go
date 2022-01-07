@@ -66,16 +66,10 @@ func UpdateTagByID(t Transaction, model Tag) error {
 	return err
 }
 
-func DeleteTagByID(t Transaction, id uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(TagTable).
+func DeleteTagByID(t Transaction, id uuid.UUID) error {
+	_, err := t.DeleteFrom(TagTable).
 		Where(TagIDDb+" = ?", id).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }

@@ -38,17 +38,11 @@ func ReadTagGameByID(t Transaction, tagID, gameID uuid.UUID) (object TagGame, ok
 	return
 }
 
-func DeleteTagGameByID(t Transaction, tagID, gameID uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(TagGameTable).
+func DeleteTagGameByID(t Transaction, tagID, gameID uuid.UUID) error {
+	_, err := t.DeleteFrom(TagGameTable).
 		Where(TagGameIDTagDb+" = ?", tagID).
 		Where(TagGameIDGameDb+" = ?", gameID).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }
