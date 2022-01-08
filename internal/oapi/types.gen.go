@@ -54,7 +54,7 @@ type ClientSchema struct {
 // ClientWalletSchema defines model for ClientWalletSchema.
 type ClientWalletSchema struct {
 	Balance  float64 `json:"balance"`
-	Coin     []byte  `json:"coin"`
+	Coin     int32   `json:"coin"`
 	Id       *string `json:"id,omitempty"`
 	IdClient *string `json:"id_client,omitempty"`
 }
@@ -131,6 +131,14 @@ type PublisherSchema struct {
 	Id          *string `json:"id,omitempty"`
 	Name        string  `json:"name"`
 	PhoneNumber string  `json:"phone_number"`
+}
+
+// RegisterClientSchema defines model for RegisterClientSchema.
+type RegisterClientSchema struct {
+	Access  ClientAccessSchema  `json:"access"`
+	Address ClientAddressSchema `json:"address"`
+	Client  ClientSchema        `json:"client"`
+	Wallet  ClientWalletSchema  `json:"wallet"`
 }
 
 // ReviewSchema defines model for ReviewSchema.
@@ -399,7 +407,7 @@ type GetPublisherGamesParams struct {
 }
 
 // PostRegisterJSONBody defines parameters for PostRegister.
-type PostRegisterJSONBody ClientAccessSchema
+type PostRegisterJSONBody RegisterClientSchema
 
 // DeleteReviewParams defines parameters for DeleteReview.
 type DeleteReviewParams struct {
