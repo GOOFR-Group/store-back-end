@@ -51,6 +51,12 @@ const (
 	ErrAddressNotFound = `address not found with ID: %s`
 )
 
+// wallet
+const (
+	ErrWalletNotFound      = `wallet not found with ID: %s`
+	ErrWalletInvalidAmount = "invalid amount"
+)
+
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`
