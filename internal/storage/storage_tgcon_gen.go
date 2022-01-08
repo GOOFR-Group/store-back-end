@@ -5,12 +5,11 @@ const (
 
 	// --------------------  File: access.go  --------------------
 	// Struct: Access
-	AccessCreatedAtDb = "created_at"
-	AccessEmailDb     = "email"
-	AccessIDDb        = "id"
-	AccessIDClientDb  = "id_client"
-	AccessOAuthDb     = "oauth"
-	AccessPasswordDb  = "password"
+	AccessEmailDb    = "email"
+	AccessIDDb       = "id"
+	AccessIDClientDb = "id_client"
+	AccessOAuthDb    = "oauth"
+	AccessPasswordDb = "password"
 
 	// --------------------  File: address.go  --------------------
 	// Struct: Address
