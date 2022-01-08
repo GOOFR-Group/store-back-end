@@ -20,12 +20,11 @@ const (
 
 // ClientAccessSchema defines model for ClientAccessSchema.
 type ClientAccessSchema struct {
-	CreatedAt time.Time `json:"created_at"`
-	Email     string    `json:"email"`
-	Id        *string   `json:"id,omitempty"`
-	IdClient  *string   `json:"id_client,omitempty"`
-	Oauth     bool      `json:"oauth"`
-	Password  *string   `json:"password,omitempty"`
+	Email    string  `json:"email"`
+	Id       *string `json:"id,omitempty"`
+	IdClient *string `json:"id_client,omitempty"`
+	Oauth    bool    `json:"oauth"`
+	Password *string `json:"password,omitempty"`
 }
 
 // ClientAddressSchema defines model for ClientAddressSchema.
