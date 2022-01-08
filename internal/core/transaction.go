@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/GOOFR-Group/store-back-end/internal/storage"
+	"github.com/goofr-group/store-back-end/internal/storage"
 
 	"github.com/gocraft/dbr/v2"
 )

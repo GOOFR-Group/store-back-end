@@ -5,7 +5,7 @@ package env
 import (
 	"strings"
 
-	"github.com/GOOFR-Group/store-back-end/internal/utils/format"
+	"github.com/goofr-group/store-back-end/internal/utils/format"
 )
 
 const (

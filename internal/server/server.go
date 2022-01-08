@@ -8,11 +8,11 @@ import (
 
 	"github.com/rs/cors"
 
-	"github.com/GOOFR-Group/store-back-end/internal/conf"
-	"github.com/GOOFR-Group/store-back-end/internal/core"
-	"github.com/GOOFR-Group/store-back-end/internal/handlers"
-	"github.com/GOOFR-Group/store-back-end/internal/logging"
-	"github.com/GOOFR-Group/store-back-end/internal/storage"
+	"github.com/goofr-group/store-back-end/internal/conf"
+	"github.com/goofr-group/store-back-end/internal/core"
+	"github.com/goofr-group/store-back-end/internal/handlers"
+	"github.com/goofr-group/store-back-end/internal/logging"
+	"github.com/goofr-group/store-back-end/internal/storage"
 )
 
 // CORSOptions represents our handler (CORS) options

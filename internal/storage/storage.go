@@ -6,8 +6,8 @@ import (
 	"github.com/gocraft/dbr/v2"
 	_ "github.com/lib/pq" //Register postgres driver
 
-	"github.com/GOOFR-Group/store-back-end/internal/conf"
-	"github.com/GOOFR-Group/store-back-end/internal/logging"
+	"github.com/goofr-group/store-back-end/internal/conf"
+	"github.com/goofr-group/store-back-end/internal/logging"
 )
 
 // Transaction is a more descriptive alias for the database record's SessionRunner interface

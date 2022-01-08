@@ -3,8 +3,8 @@ package storage
 import (
 	"time"
 
-	"github.com/GOOFR-Group/store-back-end/internal/utils/mathf"
 	"github.com/gocraft/dbr/v2"
+	"github.com/goofr-group/store-back-end/internal/utils/mathf"
 	"github.com/google/uuid"
 )
 

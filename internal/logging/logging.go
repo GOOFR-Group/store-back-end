@@ -3,7 +3,7 @@ package logging
 import (
 	"os"
 
-	"github.com/GOOFR-Group/store-back-end/internal/app"
+	"github.com/goofr-group/store-back-end/internal/app"
 	"github.com/rs/zerolog"
 )
 

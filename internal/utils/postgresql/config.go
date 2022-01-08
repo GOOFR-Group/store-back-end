@@ -5,7 +5,7 @@ package postgresql
 import (
 	"fmt"
 
-	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
+	"github.com/goofr-group/store-back-end/internal/utils/env"
 )
 
 // Defaults supplies your environment defaults via k/v pairs

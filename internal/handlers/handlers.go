@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/GOOFR-Group/store-back-end/internal/logging"
-	"github.com/GOOFR-Group/store-back-end/internal/oapi"
+	"github.com/goofr-group/store-back-end/internal/logging"
+	"github.com/goofr-group/store-back-end/internal/oapi"
 )
 
 const (

@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/GOOFR-Group/store-back-end/internal/core"
-	"github.com/GOOFR-Group/store-back-end/internal/oapi"
+	"github.com/goofr-group/store-back-end/internal/core"
+	"github.com/goofr-group/store-back-end/internal/oapi"
 )
 
 const handlerClient = "client"

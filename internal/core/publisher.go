@@ -3,9 +3,9 @@ package core
 import (
 	"fmt"
 
-	"github.com/GOOFR-Group/store-back-end/internal/oapi"
-	"github.com/GOOFR-Group/store-back-end/internal/storage"
 	"github.com/gocraft/dbr/v2"
+	"github.com/goofr-group/store-back-end/internal/oapi"
+	"github.com/goofr-group/store-back-end/internal/storage"
 	"github.com/google/uuid"
 )
 

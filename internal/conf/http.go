@@ -3,9 +3,9 @@ package conf
 import (
 	"strconv"
 
-	"github.com/GOOFR-Group/store-back-end/internal/app"
-	"github.com/GOOFR-Group/store-back-end/internal/logging"
-	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
+	"github.com/goofr-group/store-back-end/internal/app"
+	"github.com/goofr-group/store-back-end/internal/logging"
+	"github.com/goofr-group/store-back-end/internal/utils/env"
 )
 
 // AppPort represents the environment variable port of this API
