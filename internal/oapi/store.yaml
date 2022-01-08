@@ -2263,21 +2263,24 @@ components:
         games:
           type: array
           items:
-            type: object
-            required:
-              - id_game
-              - price
-              - discount
-            properties:
-              id_game:
-                type: string
-              price:
-                type: number
-                format: double
-              discount:
-                type: number
-                format: double
-    
+            $ref: '#/components/schemas/InvoiceGameSchema'
+            
+    InvoiceGameSchema:
+      type: object
+      required:
+        - id_game
+        - price
+        - discount
+      properties:
+        id_game:
+          type: string
+        price:
+          type: number
+          format: double
+        discount:
+          type: number
+          format: double
+      
     ReviewSchema:
       type: object
       properties:

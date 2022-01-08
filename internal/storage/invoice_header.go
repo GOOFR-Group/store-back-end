@@ -15,3 +15,13 @@ type InvoiceHeader struct {
 	PurchaseDate time.Time `db:"purchase_date"`
 	VatID        int64     `db:"vat_id"`
 }
+
+func ReadInvoiceHeadersByClientID(t Transaction, id uuid.UUID) (objects []InvoiceHeader, err error) {
+	_, err = t.Select(InvoiceHeaderTable).
+		From(InvoiceHeaderTable).
+		Where(InvoiceHeaderIDClientDb+" = ?", id).
+		OrderDesc(InvoiceHeaderPurchaseDateDb).
+		Load(&objects)
+
+	return
+}
