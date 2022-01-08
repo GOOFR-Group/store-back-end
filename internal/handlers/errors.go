@@ -46,6 +46,11 @@ const (
 	ErrAccessAlreadyCreated   = "email already registered"
 )
 
+// address
+const (
+	ErrAddressNotFound = `address not found with ID: %s`
+)
+
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`
