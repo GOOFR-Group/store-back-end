@@ -57,6 +57,22 @@ func ReadAccessByEmail(t Transaction, email string) (object Access, ok bool, err
 	return
 }
 
+func ReadAccessByEmailNotFromClientID(t Transaction, email string, id uuid.UUID) (object Access, ok bool, err error) {
+	err = t.Select("*").
+		From(AccessTable).
+		Where(AccessEmailDb+" = ?", email).
+		Where(AccessIDClientDb+" != ?", id).
+		LoadOne(&object)
+
+	switch err {
+	case nil:
+		ok = true
+	case dbr.ErrNotFound:
+		err = nil
+	}
+	return
+}
+
 func UpdateAccessByClientID(t Transaction, model Access) error {
 	_, err := t.Update(AccessTable).
 		SetMap(map[string]interface{}{

@@ -816,7 +816,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
               example:
-                error: "email not registered"
+                error: "incorrect email or password"
     
   /register:
     post:

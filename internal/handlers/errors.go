@@ -36,6 +36,16 @@ const (
 	ErrClientNotFound = `client not found with ID: %s`
 )
 
+// access
+const (
+	ErrAccessinactive         = "inactive client"
+	ErrAccessIncorrect        = "incorrect email or password"
+	ErrAccessInvalidEmail     = "invalid email"
+	ErrAccessPasswordRequired = "password not submitted"
+	ErrAccessInvalidPassword  = "password must be at least 6 characters long, composed of letters with at least one digit and one special character"
+	ErrAccessAlreadyCreated   = "email already registered"
+)
+
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`

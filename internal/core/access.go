@@ -41,10 +41,6 @@ func PostLogin(req oapi.PostLoginJSONRequestBody) (oapi.ClientSchema, error) {
 		return oapi.ClientSchema{}, err
 	}
 
-	if !object.Active {
-		return oapi.ClientSchema{}, ErrClientInactive
-	}
-
 	if req.Password == nil && !access.OAuth {
 		return oapi.ClientSchema{}, ErrPasswordRequired
 	}
@@ -56,6 +52,10 @@ func PostLogin(req oapi.PostLoginJSONRequestBody) (oapi.ClientSchema, error) {
 		if !checkPasswordHash(*req.Password, access.Password.String) {
 			return oapi.ClientSchema{}, ErrIncorrectPassword
 		}
+	}
+
+	if !object.Active {
+		return oapi.ClientSchema{}, ErrClientInactive
 	}
 
 	return getClientFromModel(object), nil
@@ -234,6 +234,13 @@ func PutAccess(params oapi.PutAccessParams, req oapi.PutAccessJSONRequestBody) e
 		}
 		if !ok {
 			return ErrClientNotFound
+		}
+
+		if _, ok, err = storage.ReadAccessByEmailNotFromClientID(tx, req.Email, client.ID); err != nil {
+			return err
+		}
+		if ok {
+			return ErrObjectAlreadyCreated
 		}
 
 		if _, ok, err = storage.ReadAccessByClientID(tx, client.ID); err != nil {
