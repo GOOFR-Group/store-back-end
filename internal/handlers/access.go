@@ -113,7 +113,7 @@ func (*StoreImpl) PutAccess(w http.ResponseWriter, r *http.Request, params oapi.
 		writeConflict(w, handlerAccess, ErrAccessInvalidPassword)
 		return
 	case core.ErrClientNotFound:
-		writeConflict(w, handlerAccess, fmt.Sprintf(ErrClientNotFound, params.ClientID))
+		writeNotFound(w, handlerAccess, fmt.Sprintf(ErrClientNotFound, params.ClientID))
 		return
 	case core.ErrObjectAlreadyCreated:
 		writeConflict(w, handlerAccess, ErrAccessAlreadyCreated)
