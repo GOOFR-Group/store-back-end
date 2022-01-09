@@ -42,6 +42,16 @@ func ReadGames(t Transaction) (objects []Game, err error) {
 	return
 }
 
+func ReadGamesByNameLike(t Transaction, like string, limit int64) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameNameDb+" LIKE '%?%'", like).
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
 func ReadGamesOrderByAvgReviewDesc(t Transaction, limit int64) (objects []Game, err error) {
 	_, err = t.Select(GameTable+".*").
 		From(GameTable).
