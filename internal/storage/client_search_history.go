@@ -15,3 +15,21 @@ type ClientSearchHistory struct {
 	IDClient uuid.UUID `db:"id_client"`
 	DateTime time.Time `db:"date_time"`
 }
+
+func CreateClientSearchHistory(t Transaction, model ClientSearchHistory) error {
+	_, err := t.InsertInto(ClientSearchHistoryTable).
+		Columns(ClientSearchHistoryIDDb, ClientSearchHistoryIDGameDb, ClientSearchHistoryIDClientDb, ClientSearchHistoryDateTimeDb).
+		Record(model).
+		Exec()
+
+	return err
+}
+
+func ReadClientSearchHistoryByClientID(t Transaction, id uuid.UUID) (objects []ClientSearchHistory, err error) {
+	_, err = t.Select("*").
+		From(ClientSearchHistoryTable).
+		Where(ClientSearchHistoryIDClientDb+" = ?", id).
+		Load(&objects)
+
+	return
+}
