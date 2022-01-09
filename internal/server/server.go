@@ -6,20 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rs/cors"
-
 	"github.com/goofr-group/store-back-end/internal/conf"
 	"github.com/goofr-group/store-back-end/internal/core"
 	"github.com/goofr-group/store-back-end/internal/handlers"
 	"github.com/goofr-group/store-back-end/internal/logging"
 	"github.com/goofr-group/store-back-end/internal/storage"
 )
-
-// CORSOptions represents our handler (CORS) options
-var CORSOptions = cors.Options{
-	AllowedOrigins: []string{"*"},
-	AllowedMethods: []string{http.MethodPost, http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions},
-}
 
 // RunServer entry point
 func RunServer(ctx context.Context) error {
@@ -45,14 +37,11 @@ func RunServer(ctx context.Context) error {
 	logging.AppLogger.Info().Str("version", core.Version().Version).Str("notes", core.Version().Notes).Msg("GOOFR Store API")
 	logging.AppLogger.Info().Msgf("Listening on port %d", port)
 
-	// add CORS options
-	handler := cors.New(CORSOptions).Handler(conf.Router())
-
 	s := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
-		Handler:      handler,
+		Handler:      conf.Router(),
 		Addr:         fmt.Sprintf(":%d", port),
 	}
 
