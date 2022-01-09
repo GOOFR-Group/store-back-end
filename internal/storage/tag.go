@@ -30,16 +30,6 @@ func ReadTags(t Transaction) (objects []Tag, err error) {
 	return
 }
 
-func ReadTagsByNameLike(t Transaction, like string, limit int64) (objects []Tag, err error) {
-	_, err = t.Select("*").
-		From(TagTable).
-		Where(TagNameDb+" LIKE '%?%'", like).
-		Limit(uint64(limit)).
-		Load(&objects)
-
-	return
-}
-
 func ReadTagsByGameID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
 	_, err = t.Select(TagTable+".*").
 		From(TagTable).
