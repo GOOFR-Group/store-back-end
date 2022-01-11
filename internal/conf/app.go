@@ -3,8 +3,8 @@ package conf
 import (
 	"path/filepath"
 
-	"github.com/GOOFR-Group/store-back-end/internal/app"
-	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
+	"github.com/goofr-group/store-back-end/internal/app"
+	"github.com/goofr-group/store-back-end/internal/utils/env"
 )
 
 const (

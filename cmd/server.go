@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/GOOFR-Group/store-back-end/internal/logging"
-	"github.com/GOOFR-Group/store-back-end/internal/server"
+	"github.com/goofr-group/store-back-end/internal/logging"
+	"github.com/goofr-group/store-back-end/internal/server"
 )
 
 func main() {

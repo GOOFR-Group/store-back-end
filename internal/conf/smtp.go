@@ -3,7 +3,7 @@ package conf
 import (
 	"net/smtp"
 
-	"github.com/GOOFR-Group/store-back-end/internal/utils/env"
+	"github.com/goofr-group/store-back-end/internal/utils/env"
 )
 
 const (

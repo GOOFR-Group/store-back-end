@@ -1,10 +1,10 @@
 package core
 
 import (
-	"github.com/GOOFR-Group/store-back-end/internal/oapi"
-	"github.com/GOOFR-Group/store-back-end/internal/storage"
 	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/gocraft/dbr/v2"
+	"github.com/goofr-group/store-back-end/internal/oapi"
+	"github.com/goofr-group/store-back-end/internal/storage"
 	"github.com/google/uuid"
 )
 

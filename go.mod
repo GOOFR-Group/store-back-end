@@ -1,4 +1,4 @@
-module github.com/GOOFR-Group/store-back-end
+module github.com/goofr-group/store-back-end
 
 go 1.17
 

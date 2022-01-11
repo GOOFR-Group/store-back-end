@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/GOOFR-Group/store-back-end/internal/core"
-	"github.com/GOOFR-Group/store-back-end/internal/oapi"
+	"github.com/goofr-group/store-back-end/internal/core"
+	"github.com/goofr-group/store-back-end/internal/oapi"
 )
 
 const handlerAccess = "access"
@@ -113,7 +113,7 @@ func (*StoreImpl) PutAccess(w http.ResponseWriter, r *http.Request, params oapi.
 		writeConflict(w, handlerAccess, ErrAccessInvalidPassword)
 		return
 	case core.ErrClientNotFound:
-		writeConflict(w, handlerAccess, fmt.Sprintf(ErrClientNotFound, params.ClientID))
+		writeNotFound(w, handlerAccess, fmt.Sprintf(ErrClientNotFound, params.ClientID))
 		return
 	case core.ErrObjectAlreadyCreated:
 		writeConflict(w, handlerAccess, ErrAccessAlreadyCreated)
