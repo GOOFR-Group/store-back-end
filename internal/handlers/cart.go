@@ -21,8 +21,11 @@ func (*StoreImpl) PostCart(w http.ResponseWriter, r *http.Request, params oapi.P
 	case core.ErrGameNotFound:
 		writeNotFound(w, handlerCart, fmt.Sprintf(ErrGameNotFound, params.GameID))
 		return
-	case core.ErrObjectAlreadyCreated:
+	case core.ErrGameAlreadyBought:
 		writeConflict(w, handlerCart, ErrCartGameAlreadyBought)
+		return
+	case core.ErrObjectAlreadyCreated:
+		writeConflict(w, handlerCart, ErrCartGameAlreadyAdded)
 		return
 	default:
 		writeInternalServerError(w, handlerCart, err)
@@ -83,6 +86,9 @@ func (*StoreImpl) GetCartPurchase(w http.ResponseWriter, r *http.Request, params
 		return
 	case core.ErrObjectNotFound:
 		writeNotFound(w, handlerCart, ErrCartEmpty)
+		return
+	case core.ErrInvoiceHeaderNotFound:
+		writeInternalServerError(w, handlerCart, err)
 		return
 	default:
 		writeInternalServerError(w, handlerCart, err)

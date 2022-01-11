@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	smtpSubject = "Subject: %s\n"
+	smtpSubject = "Subject: %s\r\n\r\n"
 	smtpMIME    = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 )
 

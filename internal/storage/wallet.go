@@ -12,7 +12,7 @@ type Wallet struct {
 	ID       uuid.UUID `db:"id"`
 	IDClient uuid.UUID `db:"id_client"`
 	Balance  float64   `db:"balance"`
-	Coin     rune      `db:"coin"`
+	Coin     string    `db:"coin"`
 }
 
 func CreateWallet(t Transaction, model Wallet) error {

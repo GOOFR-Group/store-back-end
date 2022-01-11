@@ -59,7 +59,8 @@ const (
 
 // cart
 const (
-	ErrCartGameAlreadyBought   = "client already has the given game in his cart"
+	ErrCartGameAlreadyBought   = "client already has the given game in his library"
+	ErrCartGameAlreadyAdded    = "client already has the given game in his cart"
 	ErrCartGameNotAdded        = "client does not have this game in his cart"
 	ErrCartInsufficientBalance = "client does not have enough balance"
 	ErrCartEmpty               = "client has no games in his cart"

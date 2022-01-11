@@ -34,7 +34,7 @@ CREATE TABLE "wallet" (
   "id" uuid PRIMARY KEY,
   "id_client" uuid UNIQUE NOT NULL,
   "balance" float NOT NULL,
-  "coin" char NOT NULL
+  "coin" varchar NOT NULL
 );
 
 CREATE TABLE "address" (

@@ -49,6 +49,13 @@ func PostCart(params oapi.PostCartParams) error {
 			return err
 		}
 		if ok {
+			return ErrGameAlreadyBought
+		}
+
+		if _, ok, err = storage.ReadCartByID(tx, idGame, idClient); err != nil {
+			return err
+		}
+		if ok {
 			return ErrObjectAlreadyCreated
 		}
 
@@ -285,6 +292,13 @@ func GetCartPurchase(params oapi.GetCartPurchaseParams) (oapi.InvoiceSchema, err
 			objectGames = append(objectGames, g)
 		}
 
+		if invoiceHeader, ok, err = storage.ReadInvoiceHeaderByID(tx, idInvoice); err != nil {
+			return err
+		}
+		if !ok {
+			return ErrInvoiceHeaderNotFound
+		}
+
 		object = invoice{
 			header: invoiceHeader,
 			games:  invoiceGames,
@@ -299,7 +313,7 @@ func GetCartPurchase(params oapi.GetCartPurchaseParams) (oapi.InvoiceSchema, err
 		return oapi.InvoiceSchema{}, err
 	}
 
-	title := "GOOFR Store - Invoice -" + object.header.PurchaseDate.Format(timeLayout)
+	title := fmt.Sprintf("GOOFR Store - Invoice - %s", object.header.PurchaseDate.Format(timeLayout))
 
 	body := fmt.Sprintf("ID: %s\n", object.header.IDInvoice.String())
 	body += fmt.Sprintf("Purchase Date: %s\n", object.header.PurchaseDate.Format(timeLayout))
@@ -309,10 +323,10 @@ func GetCartPurchase(params oapi.GetCartPurchaseParams) (oapi.InvoiceSchema, err
 		body += fmt.Sprintf("\nName: %s\n", g.Name)
 		body += fmt.Sprintf("\tState: %s\n", g.State)
 		body += fmt.Sprintf("\tRelease Date: %s\n", g.ReleaseDate.Format(timeLayout))
-		body += fmt.Sprintf("\tPrice: %c%.2f\n", clientWallet.Coin, g.Price)
+		body += fmt.Sprintf("\tPrice: %s%.2f\n", clientWallet.Coin, g.Price)
 		body += fmt.Sprintf("\tDiscount: %.2f%%\n", g.Discount*100)
 	}
-	body += fmt.Sprintf("\nTotal: %c%.2f", clientWallet.Coin, total)
+	body += fmt.Sprintf("\nTotal: %s%.2f", clientWallet.Coin, total)
 
 	message := []byte(fmt.Sprintf(smtpSubject, title) + body)
 	if err = smtp.SendMail(conf.SMTPAddress(), conf.SMTPAuthentication(), conf.SMTPEmailAddress(), []string{clientAccess.Email}, message); err != nil {

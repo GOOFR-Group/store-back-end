@@ -3,6 +3,7 @@ package storage
 import (
 	"time"
 
+	"github.com/gocraft/dbr/v2"
 	"github.com/google/uuid"
 )
 
@@ -32,5 +33,19 @@ func ReadInvoiceHeadersByClientID(t Transaction, id uuid.UUID) (objects []Invoic
 		OrderDesc(InvoiceHeaderPurchaseDateDb).
 		Load(&objects)
 
+	return
+}
+func ReadInvoiceHeaderByID(t Transaction, id uuid.UUID) (object InvoiceHeader, ok bool, err error) {
+	err = t.Select("*").
+		From(InvoiceHeaderTable).
+		Where(InvoiceHeaderIDInvoiceDb+" = ?", id).
+		LoadOne(&object)
+
+	switch err {
+	case nil:
+		ok = true
+	case dbr.ErrNotFound:
+		err = nil
+	}
 	return
 }
