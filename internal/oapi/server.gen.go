@@ -7,14 +7,180 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/go-chi/chi/v5"
 )
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Updates a client access
+	// (PUT /access)
+	PutAccess(w http.ResponseWriter, r *http.Request, params PutAccessParams)
+	// Adds balance to the client's wallet
+	// (GET /addBalance)
+	GetAddBalance(w http.ResponseWriter, r *http.Request, params GetAddBalanceParams)
+	// Gets a client's address
+	// (GET /address)
+	GetAddress(w http.ResponseWriter, r *http.Request, params GetAddressParams)
+	// Updates an address
+	// (PUT /address)
+	PutAddress(w http.ResponseWriter, r *http.Request, params PutAddressParams)
+	// Removes a game from the client's cart
+	// (DELETE /cart)
+	DeleteCart(w http.ResponseWriter, r *http.Request, params DeleteCartParams)
+	// Gets all the games the client has in his cart
+	// (GET /cart)
+	GetCart(w http.ResponseWriter, r *http.Request, params GetCartParams)
+	// Adds a game to the client's cart
+	// (POST /cart)
+	PostCart(w http.ResponseWriter, r *http.Request, params PostCartParams)
+	// Purchases all games the client has in his cart
+	// (GET /cartPurchase)
+	GetCartPurchase(w http.ResponseWriter, r *http.Request, params GetCartPurchaseParams)
+	// Deletes a client
+	// (DELETE /client)
+	DeleteClient(w http.ResponseWriter, r *http.Request, params DeleteClientParams)
+	// Gets a client
+	// (GET /client)
+	GetClient(w http.ResponseWriter, r *http.Request, params GetClientParams)
+	// Updates a client
+	// (PUT /client)
+	PutClient(w http.ResponseWriter, r *http.Request, params PutClientParams)
+	// Deletes a game
+	// (DELETE /game)
+	DeleteGame(w http.ResponseWriter, r *http.Request, params DeleteGameParams)
+	// Gets a game
+	// (GET /game)
+	GetGame(w http.ResponseWriter, r *http.Request, params GetGameParams)
+	// Creates a new game
+	// (POST /game)
+	PostGame(w http.ResponseWriter, r *http.Request)
+	// Updates a game
+	// (PUT /game)
+	PutGame(w http.ResponseWriter, r *http.Request, params PutGameParams)
+	// Removes an image from a game
+	// (DELETE /gameImage)
+	DeleteGameImage(w http.ResponseWriter, r *http.Request, params DeleteGameImageParams)
+	// Gets all images of a game
+	// (GET /gameImage)
+	GetGameImage(w http.ResponseWriter, r *http.Request, params GetGameImageParams)
+	// Adds an image to a game
+	// (POST /gameImage)
+	PostGameImage(w http.ResponseWriter, r *http.Request, params PostGameImageParams)
+	// Gets all the reviews for a game
+	// (GET /gameReviews)
+	GetGameReviews(w http.ResponseWriter, r *http.Request, params GetGameReviewsParams)
+	// Removes a tag from a game
+	// (DELETE /gameTag)
+	DeleteGameTag(w http.ResponseWriter, r *http.Request, params DeleteGameTagParams)
+	// Gets all tags of a game
+	// (GET /gameTag)
+	GetGameTag(w http.ResponseWriter, r *http.Request, params GetGameTagParams)
+	// Adds a tag to a game
+	// (POST /gameTag)
+	PostGameTag(w http.ResponseWriter, r *http.Request, params PostGameTagParams)
 	// Health check
 	// (GET /health)
 	GetHealth(w http.ResponseWriter, r *http.Request)
+	// Gets the client's invoice history
+	// (GET /invoice)
+	GetInvoice(w http.ResponseWriter, r *http.Request, params GetInvoiceParams)
+	// Gets all the games the client has in his library
+	// (GET /library)
+	GetLibrary(w http.ResponseWriter, r *http.Request, params GetLibraryParams)
+	// Log in to a client's account
+	// (POST /login)
+	PostLogin(w http.ResponseWriter, r *http.Request)
+	// Returns the new games from the store
+	// (GET /newStore)
+	GetNewStore(w http.ResponseWriter, r *http.Request, params GetNewStoreParams)
+	// Removes an email from the newsletter list
+	// (DELETE /newsletter)
+	DeleteNewsletter(w http.ResponseWriter, r *http.Request, params DeleteNewsletterParams)
+	// Gets the list of email subscribed to the newsletter
+	// (GET /newsletter)
+	GetNewsletter(w http.ResponseWriter, r *http.Request)
+	// Adds an email to the newsletter list
+	// (POST /newsletter)
+	PostNewsletter(w http.ResponseWriter, r *http.Request, params PostNewsletterParams)
+	// Returns featured games from the store
+	// (GET /noteworthyStore)
+	GetNoteworthyStore(w http.ResponseWriter, r *http.Request, params GetNoteworthyStoreParams)
+	// Deletes a publisher
+	// (DELETE /publisher)
+	DeletePublisher(w http.ResponseWriter, r *http.Request, params DeletePublisherParams)
+	// Gets a publisher
+	// (GET /publisher)
+	GetPublisher(w http.ResponseWriter, r *http.Request, params GetPublisherParams)
+	// Creates a new publisher
+	// (POST /publisher)
+	PostPublisher(w http.ResponseWriter, r *http.Request)
+	// Updates a publisher
+	// (PUT /publisher)
+	PutPublisher(w http.ResponseWriter, r *http.Request, params PutPublisherParams)
+	// Gets all the publisher's games
+	// (GET /publisherGames)
+	GetPublisherGames(w http.ResponseWriter, r *http.Request, params GetPublisherGamesParams)
+	// Registers a client
+	// (POST /register)
+	PostRegister(w http.ResponseWriter, r *http.Request)
+	// Deletes a review
+	// (DELETE /review)
+	DeleteReview(w http.ResponseWriter, r *http.Request, params DeleteReviewParams)
+	// Creates a new review
+	// (POST /review)
+	PostReview(w http.ResponseWriter, r *http.Request)
+	// Updates a review
+	// (PUT /review)
+	PutReview(w http.ResponseWriter, r *http.Request, params PutReviewParams)
+	// Search games
+	// (GET /searchGame)
+	GetSearchGame(w http.ResponseWriter, r *http.Request, params GetSearchGameParams)
+	// Gets the client's search history
+	// (GET /searchHistory)
+	GetSearchHistory(w http.ResponseWriter, r *http.Request, params GetSearchHistoryParams)
+	// Adds a search to the client's history
+	// (POST /searchHistory)
+	PostSearchHistory(w http.ResponseWriter, r *http.Request, params PostSearchHistoryParams)
+	// Search tags
+	// (GET /searchTag)
+	GetSearchTag(w http.ResponseWriter, r *http.Request, params GetSearchTagParams)
+	// Sends a newsletter to all registered e-mails
+	// (POST /sendNewsletter)
+	PostSendNewsletter(w http.ResponseWriter, r *http.Request)
+	// Deletes a tag
+	// (DELETE /tag)
+	DeleteTag(w http.ResponseWriter, r *http.Request, params DeleteTagParams)
+	// Gets a tag
+	// (GET /tag)
+	GetTag(w http.ResponseWriter, r *http.Request, params GetTagParams)
+	// Creates a new tag
+	// (POST /tag)
+	PostTag(w http.ResponseWriter, r *http.Request)
+	// Updates a tag
+	// (PUT /tag)
+	PutTag(w http.ResponseWriter, r *http.Request, params PutTagParams)
+	// Gets the top reviewed games
+	// (GET /topReviews)
+	GetTopReviews(w http.ResponseWriter, r *http.Request)
+	// Gets a client's wallet
+	// (GET /wallet)
+	GetWallet(w http.ResponseWriter, r *http.Request, params GetWalletParams)
+	// Updates a wallet
+	// (PUT /wallet)
+	PutWallet(w http.ResponseWriter, r *http.Request, params PutWalletParams)
+	// Removes a game from the client's wishlist
+	// (DELETE /wishlist)
+	DeleteWishlist(w http.ResponseWriter, r *http.Request, params DeleteWishlistParams)
+	// Gets all the games the client has in his wishlist
+	// (GET /wishlist)
+	GetWishlist(w http.ResponseWriter, r *http.Request, params GetWishlistParams)
+	// Adds a game to the client's wishlist
+	// (POST /wishlist)
+	PostWishlist(w http.ResponseWriter, r *http.Request, params PostWishlistParams)
+	// Client's main store
+	// (GET /yourStore)
+	GetYourStore(w http.ResponseWriter, r *http.Request, params GetYourStoreParams)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -26,12 +192,1813 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.HandlerFunc) http.HandlerFunc
 
+// PutAccess operation middleware
+func (siw *ServerInterfaceWrapper) PutAccess(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutAccessParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutAccess(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetAddBalance operation middleware
+func (siw *ServerInterfaceWrapper) GetAddBalance(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAddBalanceParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "amount" -------------
+	if paramValue := r.URL.Query().Get("amount"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "amount"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "amount", r.URL.Query(), &params.Amount)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "amount", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAddBalance(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetAddress operation middleware
+func (siw *ServerInterfaceWrapper) GetAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAddressParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAddress(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutAddress operation middleware
+func (siw *ServerInterfaceWrapper) PutAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutAddressParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutAddress(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteCart operation middleware
+func (siw *ServerInterfaceWrapper) DeleteCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteCartParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteCart(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetCart operation middleware
+func (siw *ServerInterfaceWrapper) GetCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCartParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCart(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostCart operation middleware
+func (siw *ServerInterfaceWrapper) PostCart(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostCartParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostCart(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetCartPurchase operation middleware
+func (siw *ServerInterfaceWrapper) GetCartPurchase(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCartPurchaseParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCartPurchase(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteClient operation middleware
+func (siw *ServerInterfaceWrapper) DeleteClient(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteClientParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteClient(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetClient operation middleware
+func (siw *ServerInterfaceWrapper) GetClient(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetClientParams
+
+	// ------------- Optional query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetClient(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutClient operation middleware
+func (siw *ServerInterfaceWrapper) PutClient(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutClientParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutClient(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteGame operation middleware
+func (siw *ServerInterfaceWrapper) DeleteGame(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteGameParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteGame(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetGame operation middleware
+func (siw *ServerInterfaceWrapper) GetGame(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetGameParams
+
+	// ------------- Optional query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetGame(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostGame operation middleware
+func (siw *ServerInterfaceWrapper) PostGame(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostGame(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutGame operation middleware
+func (siw *ServerInterfaceWrapper) PutGame(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutGameParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutGame(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteGameImage operation middleware
+func (siw *ServerInterfaceWrapper) DeleteGameImage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteGameImageParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteGameImage(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetGameImage operation middleware
+func (siw *ServerInterfaceWrapper) GetGameImage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetGameImageParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetGameImage(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostGameImage operation middleware
+func (siw *ServerInterfaceWrapper) PostGameImage(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostGameImageParams
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "image" -------------
+	if paramValue := r.URL.Query().Get("image"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "image"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "image", r.URL.Query(), &params.Image)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "image", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostGameImage(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetGameReviews operation middleware
+func (siw *ServerInterfaceWrapper) GetGameReviews(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetGameReviewsParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetGameReviews(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteGameTag operation middleware
+func (siw *ServerInterfaceWrapper) DeleteGameTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteGameTagParams
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "tagID" -------------
+	if paramValue := r.URL.Query().Get("tagID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "tagID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "tagID", r.URL.Query(), &params.TagID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "tagID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteGameTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetGameTag operation middleware
+func (siw *ServerInterfaceWrapper) GetGameTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetGameTagParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetGameTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostGameTag operation middleware
+func (siw *ServerInterfaceWrapper) PostGameTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostGameTagParams
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "tagID" -------------
+	if paramValue := r.URL.Query().Get("tagID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "tagID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "tagID", r.URL.Query(), &params.TagID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "tagID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostGameTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
 // GetHealth operation middleware
 func (siw *ServerInterfaceWrapper) GetHealth(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var handler = func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetHealth(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetInvoice operation middleware
+func (siw *ServerInterfaceWrapper) GetInvoice(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetInvoiceParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetInvoice(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetLibrary operation middleware
+func (siw *ServerInterfaceWrapper) GetLibrary(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetLibraryParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetLibrary(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostLogin operation middleware
+func (siw *ServerInterfaceWrapper) PostLogin(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostLogin(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetNewStore operation middleware
+func (siw *ServerInterfaceWrapper) GetNewStore(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetNewStoreParams
+
+	// ------------- Optional query parameter "ids" -------------
+	if paramValue := r.URL.Query().Get("ids"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "ids", r.URL.Query(), &params.Ids)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ids", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetNewStore(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteNewsletter operation middleware
+func (siw *ServerInterfaceWrapper) DeleteNewsletter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteNewsletterParams
+
+	// ------------- Required query parameter "email" -------------
+	if paramValue := r.URL.Query().Get("email"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "email"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "email", r.URL.Query(), &params.Email)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "email", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteNewsletter(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetNewsletter operation middleware
+func (siw *ServerInterfaceWrapper) GetNewsletter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetNewsletter(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostNewsletter operation middleware
+func (siw *ServerInterfaceWrapper) PostNewsletter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostNewsletterParams
+
+	// ------------- Required query parameter "email" -------------
+	if paramValue := r.URL.Query().Get("email"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "email"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "email", r.URL.Query(), &params.Email)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "email", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostNewsletter(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetNoteworthyStore operation middleware
+func (siw *ServerInterfaceWrapper) GetNoteworthyStore(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetNoteworthyStoreParams
+
+	// ------------- Optional query parameter "ids" -------------
+	if paramValue := r.URL.Query().Get("ids"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "ids", r.URL.Query(), &params.Ids)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "ids", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetNoteworthyStore(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeletePublisher operation middleware
+func (siw *ServerInterfaceWrapper) DeletePublisher(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeletePublisherParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeletePublisher(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetPublisher operation middleware
+func (siw *ServerInterfaceWrapper) GetPublisher(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPublisherParams
+
+	// ------------- Optional query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPublisher(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostPublisher operation middleware
+func (siw *ServerInterfaceWrapper) PostPublisher(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostPublisher(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutPublisher operation middleware
+func (siw *ServerInterfaceWrapper) PutPublisher(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutPublisherParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutPublisher(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetPublisherGames operation middleware
+func (siw *ServerInterfaceWrapper) GetPublisherGames(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetPublisherGamesParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPublisherGames(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostRegister operation middleware
+func (siw *ServerInterfaceWrapper) PostRegister(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostRegister(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteReview operation middleware
+func (siw *ServerInterfaceWrapper) DeleteReview(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteReviewParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteReview(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostReview operation middleware
+func (siw *ServerInterfaceWrapper) PostReview(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostReview(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutReview operation middleware
+func (siw *ServerInterfaceWrapper) PutReview(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutReviewParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutReview(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetSearchGame operation middleware
+func (siw *ServerInterfaceWrapper) GetSearchGame(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSearchGameParams
+
+	// ------------- Required query parameter "search" -------------
+	if paramValue := r.URL.Query().Get("search"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "search"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "search", r.URL.Query(), &params.Search)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "search", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSearchGame(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetSearchHistory operation middleware
+func (siw *ServerInterfaceWrapper) GetSearchHistory(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSearchHistoryParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSearchHistory(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostSearchHistory operation middleware
+func (siw *ServerInterfaceWrapper) PostSearchHistory(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostSearchHistoryParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostSearchHistory(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetSearchTag operation middleware
+func (siw *ServerInterfaceWrapper) GetSearchTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSearchTagParams
+
+	// ------------- Required query parameter "search" -------------
+	if paramValue := r.URL.Query().Get("search"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "search"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "search", r.URL.Query(), &params.Search)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "search", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSearchTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostSendNewsletter operation middleware
+func (siw *ServerInterfaceWrapper) PostSendNewsletter(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostSendNewsletter(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteTag operation middleware
+func (siw *ServerInterfaceWrapper) DeleteTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteTagParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetTag operation middleware
+func (siw *ServerInterfaceWrapper) GetTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetTagParams
+
+	// ------------- Optional query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostTag operation middleware
+func (siw *ServerInterfaceWrapper) PostTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostTag(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutTag operation middleware
+func (siw *ServerInterfaceWrapper) PutTag(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutTagParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutTag(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetTopReviews operation middleware
+func (siw *ServerInterfaceWrapper) GetTopReviews(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTopReviews(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetWallet operation middleware
+func (siw *ServerInterfaceWrapper) GetWallet(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetWalletParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetWallet(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PutWallet operation middleware
+func (siw *ServerInterfaceWrapper) PutWallet(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PutWalletParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutWallet(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// DeleteWishlist operation middleware
+func (siw *ServerInterfaceWrapper) DeleteWishlist(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteWishlistParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	// ------------- Optional query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteWishlist(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetWishlist operation middleware
+func (siw *ServerInterfaceWrapper) GetWishlist(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetWishlistParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetWishlist(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// PostWishlist operation middleware
+func (siw *ServerInterfaceWrapper) PostWishlist(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params PostWishlistParams
+
+	// ------------- Required query parameter "clientID" -------------
+	if paramValue := r.URL.Query().Get("clientID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "clientID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "clientID", r.URL.Query(), &params.ClientID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "clientID", Err: err})
+		return
+	}
+
+	// ------------- Required query parameter "gameID" -------------
+	if paramValue := r.URL.Query().Get("gameID"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "gameID"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "gameID", r.URL.Query(), &params.GameID)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "gameID", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostWishlist(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetYourStore operation middleware
+func (siw *ServerInterfaceWrapper) GetYourStore(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetYourStoreParams
+
+	// ------------- Required query parameter "id" -------------
+	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
+
+	} else {
+		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
+		return
+	}
+
+	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetYourStore(w, r, params)
 	}
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -155,7 +2122,172 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/access", wrapper.PutAccess)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/addBalance", wrapper.GetAddBalance)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/address", wrapper.GetAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/address", wrapper.PutAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/cart", wrapper.DeleteCart)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/cart", wrapper.GetCart)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/cart", wrapper.PostCart)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/cartPurchase", wrapper.GetCartPurchase)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/client", wrapper.DeleteClient)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/client", wrapper.GetClient)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/client", wrapper.PutClient)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/game", wrapper.DeleteGame)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/game", wrapper.GetGame)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/game", wrapper.PostGame)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/game", wrapper.PutGame)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/gameImage", wrapper.DeleteGameImage)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/gameImage", wrapper.GetGameImage)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/gameImage", wrapper.PostGameImage)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/gameReviews", wrapper.GetGameReviews)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/gameTag", wrapper.DeleteGameTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/gameTag", wrapper.GetGameTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/gameTag", wrapper.PostGameTag)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/health", wrapper.GetHealth)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/invoice", wrapper.GetInvoice)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/library", wrapper.GetLibrary)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/login", wrapper.PostLogin)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/newStore", wrapper.GetNewStore)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/newsletter", wrapper.DeleteNewsletter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/newsletter", wrapper.GetNewsletter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/newsletter", wrapper.PostNewsletter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/noteworthyStore", wrapper.GetNoteworthyStore)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/publisher", wrapper.DeletePublisher)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/publisher", wrapper.GetPublisher)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/publisher", wrapper.PostPublisher)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/publisher", wrapper.PutPublisher)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/publisherGames", wrapper.GetPublisherGames)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/register", wrapper.PostRegister)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/review", wrapper.DeleteReview)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/review", wrapper.PostReview)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/review", wrapper.PutReview)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/searchGame", wrapper.GetSearchGame)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/searchHistory", wrapper.GetSearchHistory)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/searchHistory", wrapper.PostSearchHistory)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/searchTag", wrapper.GetSearchTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/sendNewsletter", wrapper.PostSendNewsletter)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/tag", wrapper.DeleteTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/tag", wrapper.GetTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/tag", wrapper.PostTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/tag", wrapper.PutTag)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/topReviews", wrapper.GetTopReviews)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/wallet", wrapper.GetWallet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/wallet", wrapper.PutWallet)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/wishlist", wrapper.DeleteWishlist)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/wishlist", wrapper.GetWishlist)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/wishlist", wrapper.PostWishlist)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/yourStore", wrapper.GetYourStore)
 	})
 
 	return r

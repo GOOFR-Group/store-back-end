@@ -114,7 +114,7 @@ CREATE TABLE "cart" (
 
 CREATE TABLE "invoice_header" (
   "id_invoice" uuid PRIMARY KEY,
-  "id_client" uuid,
+  "id_client" uuid NOT NULL,
   "purchase_date" timestamp NOT NULL,
   "vat_id" int NOT NULL
 );
@@ -170,3 +170,4 @@ ALTER TABLE "invoice_header" ADD FOREIGN KEY ("id_client") REFERENCES "client" (
 ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_invoice") REFERENCES "invoice_header" ("id_invoice");
 
 ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+
