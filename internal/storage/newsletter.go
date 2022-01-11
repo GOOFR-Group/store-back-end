@@ -20,7 +20,7 @@ func CreateNewsletter(t Transaction, model Newsletter) error {
 	return err
 }
 
-func ReadAllNewsletters(t Transaction) (objects []Newsletter, err error) {
+func ReadNewsletters(t Transaction) (objects []Newsletter, err error) {
 	_, err = t.Select("*").
 		From(NewsletterTable).
 		Load(&objects)

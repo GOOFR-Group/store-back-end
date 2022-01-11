@@ -38,7 +38,7 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 		var err error
 
 		if params.Id == nil {
-			if objects, err = storage.ReadAllTags(tx); err != nil {
+			if objects, err = storage.ReadTags(tx); err != nil {
 				return err
 			}
 		} else {

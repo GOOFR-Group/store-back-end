@@ -25,7 +25,7 @@ func CreatePublisher(t Transaction, model Publisher) error {
 	return err
 }
 
-func ReadAllPublishers(t Transaction) (objects []Publisher, err error) {
+func ReadPublishers(t Transaction) (objects []Publisher, err error) {
 	_, err = t.Select("*").
 		From(PublisherTable).
 		Load(&objects)
@@ -45,14 +45,6 @@ func ReadPublisherByID(t Transaction, id uuid.UUID) (object Publisher, ok bool, 
 	case dbr.ErrNotFound:
 		err = nil
 	}
-	return
-}
-func ReadPublisherGamesByID(t Transaction, id uuid.UUID) (objects []Game, err error) {
-	_, err = t.Select(GameTable+".*").
-		From(PublisherTable).
-		Join(GameTable, PublisherTable+"."+PublisherIDDb+" = "+GameTable+"."+GameIDDb).
-		Load(&objects)
-
 	return
 }
 
