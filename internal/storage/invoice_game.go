@@ -14,6 +14,15 @@ type InvoiceGame struct {
 	Discount  float64   `db:"discount"`
 }
 
+func CreateInvoiceGame(t Transaction, model InvoiceGame) error {
+	_, err := t.InsertInto(InvoiceGameTable).
+		Columns(InvoiceGameIDInvoiceDb, InvoiceGameIDGameDb, InvoiceGamePriceDb, InvoiceGameDiscountDb).
+		Record(model).
+		Exec()
+
+	return err
+}
+
 func ReadInvoiceGamesByInvoiceID(t Transaction, id uuid.UUID) (objects []InvoiceGame, err error) {
 	_, err = t.Select(InvoiceGameTable).
 		From(InvoiceGameTable).

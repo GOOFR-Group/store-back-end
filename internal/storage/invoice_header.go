@@ -16,6 +16,15 @@ type InvoiceHeader struct {
 	VatID        int64     `db:"vat_id"`
 }
 
+func CreateInvoiceHeader(t Transaction, model InvoiceHeader) error {
+	_, err := t.InsertInto(InvoiceHeaderTable).
+		Columns(InvoiceHeaderIDInvoiceDb, InvoiceHeaderIDClientDb, InvoiceHeaderPurchaseDateDb, InvoiceHeaderVatIDDb).
+		Record(model).
+		Exec()
+
+	return err
+}
+
 func ReadInvoiceHeadersByClientID(t Transaction, id uuid.UUID) (objects []InvoiceHeader, err error) {
 	_, err = t.Select(InvoiceHeaderTable).
 		From(InvoiceHeaderTable).
