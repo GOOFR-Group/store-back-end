@@ -17,11 +17,10 @@ CREATE TABLE "client" (
 
 CREATE TABLE "access" (
   "id" uuid PRIMARY KEY,
-  "id_client" uuid NOT NULL,
+  "id_client" uuid UNIQUE NOT NULL,
   "oauth" boolean NOT NULL,
-  "email" varchar NOT NULL,
-  "password" varchar,
-  "created_at" timestamp NOT NULL
+  "email" varchar UNIQUE NOT NULL,
+  "password" varchar
 );
 
 CREATE TABLE "client_search_history" (

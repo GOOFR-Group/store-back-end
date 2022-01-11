@@ -11,5 +11,14 @@ type Wallet struct {
 	ID       uuid.UUID `db:"id"`
 	IDClient uuid.UUID `db:"id_client"`
 	Balance  float64   `db:"balance"`
-	Coin     byte      `db:"coin"`
+	Coin     rune      `db:"coin"`
+}
+
+func CreateWallet(t Transaction, model Wallet) error {
+	_, err := t.InsertInto(WalletTable).
+		Columns(WalletIDDb, WalletIDClientDb, WalletBalanceDb, WalletCoinDb).
+		Record(model).
+		Exec()
+
+	return err
 }

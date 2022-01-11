@@ -18,3 +18,12 @@ type Address struct {
 	City       string         `db:"city"`
 	Country    string         `db:"country"`
 }
+
+func CreateAddress(t Transaction, model Address) error {
+	_, err := t.InsertInto(AddressTable).
+		Columns(AddressIDDb, AddressIDClientDb, AddressStreetDb, AddressDoorNumberDb, AddressZipCodeDb, AddressCityDb, AddressCountryDb).
+		Record(model).
+		Exec()
+
+	return err
+}

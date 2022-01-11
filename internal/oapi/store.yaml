@@ -816,7 +816,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
               example:
-                error: "email not registered"
+                error: "incorrect email or password"
     
   /register:
     post:
@@ -828,7 +828,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientAccessSchema'
+              $ref: '#/components/schemas/RegisterClientSchema'
       responses:
         '500':
           description: internal server error
@@ -2172,7 +2172,6 @@ components:
       required:
         - oauth
         - email
-        - created_at
       properties:
         id:
           type: string
@@ -2184,9 +2183,6 @@ components:
           type: string
         password:
           type: string
-        created_at:
-          type: string
-          format: date-time
     
     ClientAddressSchema:
       type: object
@@ -2225,8 +2221,25 @@ components:
           type: number
           format: double
         coin:
-          type: string
-          format: byte
+          type: integer
+          format: int32
+    
+    RegisterClientSchema:
+      type: object
+      required:
+        - client
+        - access
+        - address
+        - wallet
+      properties:
+        client:
+          $ref: '#/components/schemas/ClientSchema'
+        access:
+          $ref: '#/components/schemas/ClientAccessSchema'
+        address:
+          $ref: '#/components/schemas/ClientAddressSchema'
+        wallet:
+          $ref: '#/components/schemas/ClientWalletSchema'
     
     InvoiceSchema:
       type: object
