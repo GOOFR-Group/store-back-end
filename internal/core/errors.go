@@ -14,6 +14,7 @@ var (
 	ErrInvalidPassword      = errors.New("invalid password")
 	ErrPasswordRequired     = errors.New("password required")
 	ErrIncorrectPassword    = errors.New("incorrect password")
+	ErrInvalidAmount        = errors.New("invalid amount")
 )
 
 // specific
