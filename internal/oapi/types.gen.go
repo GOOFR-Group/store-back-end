@@ -87,17 +87,20 @@ type GameSchema struct {
 // GameSchemaState defines model for GameSchema.State.
 type GameSchemaState string
 
+// InvoiceGameSchema defines model for InvoiceGameSchema.
+type InvoiceGameSchema struct {
+	Discount float64 `json:"discount"`
+	IdGame   string  `json:"id_game"`
+	Price    float64 `json:"price"`
+}
+
 // InvoiceSchema defines model for InvoiceSchema.
 type InvoiceSchema struct {
-	Games []struct {
-		Discount float64 `json:"discount"`
-		IdGame   string  `json:"id_game"`
-		Price    float64 `json:"price"`
-	} `json:"games"`
-	Id           string    `json:"id"`
-	IdClient     string    `json:"id_client"`
-	PurchaseDate time.Time `json:"purchase_date"`
-	VatId        int64     `json:"vat_id"`
+	Games        []InvoiceGameSchema `json:"games"`
+	Id           string              `json:"id"`
+	IdClient     string              `json:"id_client"`
+	PurchaseDate time.Time           `json:"purchase_date"`
+	VatId        int64               `json:"vat_id"`
 }
 
 // NewStoreSchema defines model for NewStoreSchema.
