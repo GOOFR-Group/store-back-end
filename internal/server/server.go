@@ -34,7 +34,7 @@ func RunServer(ctx context.Context) error {
 	port := conf.Port()
 
 	// log this service as a whole
-	logging.AppLogger.Info().Str("version", core.Version().Version).Str("notes", core.Version().Notes).Msg("GOOFR Store API")
+	logging.AppLogger.Info().Str("notes", core.Version().Notes).Str("version", core.Version().Version).Msg("GOOFR Store API")
 	logging.AppLogger.Info().Msgf("Listening on port %d", port)
 
 	s := &http.Server{

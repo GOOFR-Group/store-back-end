@@ -7,12 +7,12 @@ const (
 	ErrInternalServer  = "internal server error"
 
 	// response
-	ErrParsingRequest = `error parsing request: %s`
+	ErrParsingRequest = "error parsing request: %s"
 )
 
 // game
 const (
-	ErrGameNotFound = `game not found with ID: %s`
+	ErrGameNotFound = "game not found with ID: %s"
 )
 
 // game tag
@@ -23,17 +23,17 @@ const (
 
 // game image
 const (
-	ErrImageNotFound = `image not found with ID: %s`
+	ErrImageNotFound = "image not found with ID: %s"
 )
 
 // publisher
 const (
-	ErrPublisherNotFound = `publisher not found with ID: %s`
+	ErrPublisherNotFound = "publisher not found with ID: %s"
 )
 
 // client
 const (
-	ErrClientNotFound = `client not found with ID: %s`
+	ErrClientNotFound = "client not found with ID: %s"
 )
 
 // access
@@ -48,24 +48,30 @@ const (
 
 // address
 const (
-	ErrAddressNotFound = `address not found with ID: %s`
+	ErrAddressNotFound = "address not found with ID: %s"
 )
 
 // wallet
 const (
-	ErrWalletNotFound      = `wallet not found with ID: %s`
+	ErrWalletNotFound      = "wallet not found with ID: %s"
 	ErrWalletInvalidAmount = "invalid amount"
+)
+
+// review
+const (
+	ErrReviewAlreadyCreated = "client has already reviewed the game"
+	ErrReviewNotFound       = "review not found with ID: %s"
 )
 
 // tag
 const (
-	ErrTagNotFound = `tag not found with ID: %s`
+	ErrTagNotFound = "tag not found with ID: %s"
 )
 
 // newsletter
 const (
-	ErrNewsletterEmailAlreadySubscribed = `email already subscribed: %s`
-	ErrNewsletterEmailNotYetSubscribed  = `email not yet subscribed: %s`
-	ErrNewsletterInvalidEmail           = `email is invalid: %s`
+	ErrNewsletterEmailAlreadySubscribed = "email already subscribed: %s"
+	ErrNewsletterEmailNotYetSubscribed  = "email not yet subscribed: %s"
+	ErrNewsletterInvalidEmail           = "email is invalid: %s"
 	ErrNewsletterPublisherNotFound      = "one of the publishers sent were not found"
 )

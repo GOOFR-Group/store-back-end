@@ -2283,6 +2283,9 @@ components:
       
     ReviewSchema:
       type: object
+      required:
+        - id_game
+        - id_client
       properties:
         id:
           type: string

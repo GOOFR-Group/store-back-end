@@ -3,7 +3,7 @@ package core
 import "errors"
 
 const (
-	ErrGeneratingUUID = `failed to generate new UUID: %s`
+	ErrGeneratingUUID = "failed to generate new UUID: %s"
 )
 
 // general

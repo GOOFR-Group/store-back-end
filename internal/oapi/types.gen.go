@@ -146,8 +146,8 @@ type RegisterClientSchema struct {
 // ReviewSchema defines model for ReviewSchema.
 type ReviewSchema struct {
 	Id       *string `json:"id,omitempty"`
-	IdClient *string `json:"id_client,omitempty"`
-	IdGame   *string `json:"id_game,omitempty"`
+	IdClient string  `json:"id_client"`
+	IdGame   string  `json:"id_game"`
 	Review   *string `json:"review,omitempty"`
 	Stars    *int64  `json:"stars,omitempty"`
 }
