@@ -31,6 +31,11 @@ const (
 	ErrPublisherNotFound = `publisher not found with ID: %s`
 )
 
+// client
+const (
+	ErrClientNotFound = `client not found with ID: %s`
+)
+
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`

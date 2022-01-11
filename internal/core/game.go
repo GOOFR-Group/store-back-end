@@ -438,16 +438,14 @@ func DeleteGameImage(params oapi.DeleteGameImageParams) (oapi.GameImageSchema, e
 func getGameFromModel(model storage.Game) oapi.GameSchema {
 	id := model.ID.String()
 	return oapi.GameSchema{
-		Id:          &id,
-		IdPublisher: model.IDPublisher.String(),
-		Name:        model.Name,
-		Price:       model.Price,
-		Discount:    model.Discount,
-		State:       oapi.GameSchemaState(model.State),
-		CoverImage:  model.CoverImage,
-		ReleaseDate: openapi_types.Date{
-			Time: model.ReleaseDate,
-		},
+		Id:           &id,
+		IdPublisher:  model.IDPublisher.String(),
+		Name:         model.Name,
+		Price:        model.Price,
+		Discount:     model.Discount,
+		State:        oapi.GameSchemaState(model.State),
+		CoverImage:   model.CoverImage,
+		ReleaseDate:  openapi_types.Date{Time: model.ReleaseDate},
 		Description:  model.Description,
 		DownloadLink: model.DownloadLink,
 	}

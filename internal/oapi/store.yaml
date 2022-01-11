@@ -2163,6 +2163,7 @@ components:
           type: string
         vat_id:
           type: integer
+          format: int64
         active:
           type: boolean
     
@@ -2245,6 +2246,7 @@ components:
           format: date-time
         vat_id:
           type: integer
+          format: int64
         games:
           type: array
           items:
@@ -2274,6 +2276,7 @@ components:
           type: string
         stars:
           type: integer
+          format: int64
         review:
           type: string
     

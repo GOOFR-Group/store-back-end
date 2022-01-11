@@ -48,7 +48,7 @@ type ClientSchema struct {
 	PhoneNumber string             `json:"phone_number"`
 	Picture     string             `json:"picture"`
 	Surname     string             `json:"surname"`
-	VatId       int                `json:"vat_id"`
+	VatId       int64              `json:"vat_id"`
 }
 
 // ClientWalletSchema defines model for ClientWalletSchema.
@@ -98,7 +98,7 @@ type InvoiceSchema struct {
 	Id           string    `json:"id"`
 	IdClient     string    `json:"id_client"`
 	PurchaseDate time.Time `json:"purchase_date"`
-	VatId        int       `json:"vat_id"`
+	VatId        int64     `json:"vat_id"`
 }
 
 // NewStoreSchema defines model for NewStoreSchema.
@@ -139,7 +139,7 @@ type ReviewSchema struct {
 	IdClient *string `json:"id_client,omitempty"`
 	IdGame   *string `json:"id_game,omitempty"`
 	Review   *string `json:"review,omitempty"`
-	Stars    *int    `json:"stars,omitempty"`
+	Stars    *int64  `json:"stars,omitempty"`
 }
 
 // SearchSchema defines model for SearchSchema.
