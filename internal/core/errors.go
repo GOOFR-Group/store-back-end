@@ -10,9 +10,12 @@ const (
 var (
 	ErrObjectNotFound       = errors.New("failed to find object")
 	ErrObjectAlreadyCreated = errors.New("object already created")
+	ErrInvalidEmail         = errors.New("invalid email")
 )
 
-// newsletter
+// specific
 var (
-	ErrInvalidEmail = errors.New("invalid email")
+	ErrGameNotFound      = errors.New("failed to find game")
+	ErrPublisherNotFound = errors.New("failed to find publisher")
+	ErrTagNotFound       = errors.New("failed to find tag")
 )

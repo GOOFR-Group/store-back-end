@@ -30,6 +30,16 @@ func ReadTags(t Transaction) (objects []Tag, err error) {
 	return
 }
 
+func ReadTagsByGameID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
+	_, err = t.Select(TagTable+".*").
+		From(TagTable).
+		Join(TagGameTable, TagTable+"."+TagIDDb+" = "+TagGameTable+"."+TagGameIDTagDb).
+		Where(TagGameTable+"."+TagGameIDGameDb+" = ?", id).
+		Load(&objects)
+
+	return
+}
+
 func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	err = t.Select("*").
 		From(TagTable).
@@ -56,16 +66,10 @@ func UpdateTagByID(t Transaction, model Tag) error {
 	return err
 }
 
-func DeleteTagByID(t Transaction, id uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(TagTable).
+func DeleteTagByID(t Transaction, id uuid.UUID) error {
+	_, err := t.DeleteFrom(TagTable).
 		Where(TagIDDb+" = ?", id).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }

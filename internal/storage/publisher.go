@@ -62,16 +62,10 @@ func UpdatePublisherByID(t Transaction, model Publisher) error {
 	return err
 }
 
-func DeletePublisherByID(t Transaction, id uuid.UUID) (ok bool, err error) {
-	_, err = t.DeleteFrom(PublisherTable).
+func DeletePublisherByID(t Transaction, id uuid.UUID) error {
+	_, err := t.DeleteFrom(PublisherTable).
 		Where(PublisherIDDb+" = ?", id).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }
