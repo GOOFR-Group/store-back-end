@@ -19,7 +19,7 @@ func PostTag(req oapi.PostTagJSONRequestBody) error {
 	}
 
 	if err = handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		return storage.CreateNewTag(tx, storage.Tag{
+		return storage.CreateTag(tx, storage.Tag{
 			ID:   id,
 			Name: req.Name,
 		})
@@ -38,7 +38,7 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 		var err error
 
 		if params.Id == nil {
-			if objects, err = storage.GetAllTags(tx); err != nil {
+			if objects, err = storage.ReadAllTags(tx); err != nil {
 				return err
 			}
 		} else {
@@ -49,7 +49,7 @@ func GetTag(params oapi.GetTagParams) ([]oapi.TagSchema, error) {
 
 			var object storage.Tag
 			var ok bool
-			object, ok, err = storage.GetTagByID(tx, id)
+			object, ok, err = storage.ReadTagByID(tx, id)
 			if err != nil {
 				return err
 			}
@@ -80,18 +80,15 @@ func PutTag(params oapi.PutTagParams, req oapi.PutTagJSONRequestBody) error {
 			return err
 		}
 
-		ok, err = storage.UpdateTagByID(tx, storage.Tag{
+		err = storage.UpdateTagByID(tx, storage.Tag{
 			ID:   id,
 			Name: req.Name,
 		})
 		if err != nil {
 			return err
 		}
-		if !ok {
-			return ErrObjectNotFound
-		}
 
-		_, ok, err = storage.GetTagByID(tx, id)
+		_, ok, err = storage.ReadTagByID(tx, id)
 		if err != nil {
 			return err
 		}
@@ -120,7 +117,7 @@ func DeleteTag(params oapi.DeleteTagParams) (oapi.TagSchema, error) {
 			return err
 		}
 
-		object, ok, err = storage.GetTagByID(tx, id)
+		object, ok, err = storage.ReadTagByID(tx, id)
 		if err != nil {
 			return err
 		}

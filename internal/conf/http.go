@@ -28,7 +28,7 @@ func InitServer() {
 	port = portEnvValueInt
 }
 
-// GetPort retrieves the configured http port
-func GetPort() int {
+// Port retrieves the configured http port
+func Port() int {
 	return port
 }

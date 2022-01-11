@@ -2,7 +2,22 @@
 
 ## Quickstart
 
-### Build & Run (using docker-compose)
+### Build & Run
+
+```bash
+# vendors the dependencies
+make mod
+```
+
+```bash
+# create `secrets` directory
+mkdir secrets 
+
+# create secrets
+echo 'db_password' > secrets/postgres_password.txt
+echo 'email' > secrets/smtp_email.txt
+echo 'email_password' > secrets/smtp_password.txt
+```
 
 ```bash
 # build containers and deploy
@@ -14,6 +29,7 @@ docker-compose up --build
 ```bash
 # drops the volumes attached to the containers
 docker-compose down -v
+
 # brings up the containers
 docker-compose up
 ```

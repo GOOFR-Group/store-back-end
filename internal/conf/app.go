@@ -37,17 +37,17 @@ func InitApp() {
 	}
 }
 
-// GetPath retrieves the configured base app path
-func GetPath() string {
+// Path retrieves the configured base app path
+func Path() string {
 	return mainPath
 }
 
-// GetConfPath retrieves the configuration files path
-func GetConfPath() string {
+// ConfPath retrieves the configuration files path
+func ConfPath() string {
 	return confPath
 }
 
-// GetStaticPath retrieves the configured static files path
-func GetStaticPath() string {
+// StaticPath retrieves the configured static files path
+func StaticPath() string {
 	return staticPath
 }

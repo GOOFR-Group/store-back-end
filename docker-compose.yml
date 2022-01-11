@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   db:
     image: store_postgres:latest
@@ -8,10 +9,12 @@ services:
     healthcheck:
       test: nc -vz localhost 5432
     restart: unless-stopped
+    secrets:
+      - postgres_password
     environment:
       - POSTGRES_DB=store_db
       - POSTGRES_USER=goofr
-      - POSTGRES_PASSWORD=goofr
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
     volumes:
       - database-data:/var/lib/postgresql/data
       - $PWD/tools/db/initdb/.:/docker-entrypoint-initdb.d/
@@ -39,6 +42,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
+    secrets:
+      - postgres_password
+      - smtp_email
+      - smtp_password
     environment:
       - GOOFR_Store_PATH=/go
       - GOOFR_Store_CONF_PATH=conf
@@ -47,9 +55,18 @@ services:
       - DB_PORT=5432
       - DB_NAME=store_db
       - DB_USER=goofr
-      - DB_PASSWORD=goofr
       - DB_SSLMODE=disable
-    restart: unless-stopped
+      - DB_PASSWORD_FILE=/run/secrets/postgres_password
+      - SMTP_EMAIL_FILE=/run/secrets/smtp_email
+      - SMTP_PASSWORD_FILE=/run/secrets/smtp_password
 
 volumes:
   database-data: null
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  smtp_email:
+    file: ./secrets/smtp_email.txt
+  smtp_password:
+    file: ./secrets/smtp_password.txt

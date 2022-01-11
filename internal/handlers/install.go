@@ -19,13 +19,13 @@ type StoreImpl struct{}
 
 // Register registers the server handlers
 func Register() error {
-	router := conf.GetRouter()
+	router := conf.Router()
 	if router == nil {
 		return fmt.Errorf("router is not initialized")
 	}
 
 	// register swagger spec
-	specPath := filepath.Join(conf.GetStaticPath(), docsFolder, specFile)
+	specPath := filepath.Join(conf.StaticPath(), docsFolder, specFile)
 	router.Get(specURL, func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, specPath)
 	})

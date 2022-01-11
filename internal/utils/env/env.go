@@ -53,3 +53,25 @@ func GetEnvOrDefaultCascade(key string, defaults Defaults, global string) (value
 	}
 	return
 }
+
+// CreateEnvValueFromEnvFile creates an environment variable from the contents of another variable that points to a file.
+// If `ignoreIfExists` is set to true and the environment variable already exists, its creation will be ignored.
+func CreateEnvValueFromEnvFile(envValue, envFile string, ignoreIfExists bool) {
+	if ignoreIfExists {
+		if _, ok := os.LookupEnv(envValue); ok {
+			return
+		}
+	}
+
+	file, ok := os.LookupEnv(envFile)
+	if !ok {
+		return
+	}
+
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return
+	}
+
+	os.Setenv(envValue, string(data))
+}

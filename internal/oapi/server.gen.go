@@ -97,7 +97,7 @@ type ServerInterface interface {
 	// Removes an email from the newsletter list
 	// (DELETE /newsletter)
 	DeleteNewsletter(w http.ResponseWriter, r *http.Request, params DeleteNewsletterParams)
-	// Gets the list of email subscribed to the newsletter
+	// Gets the list of emails subscribed to the newsletter
 	// (GET /newsletter)
 	GetNewsletter(w http.ResponseWriter, r *http.Request)
 	// Adds an email to the newsletter list
@@ -145,7 +145,7 @@ type ServerInterface interface {
 	// Search tags
 	// (GET /searchTag)
 	GetSearchTag(w http.ResponseWriter, r *http.Request, params GetSearchTagParams)
-	// Sends a newsletter to all registered e-mails
+	// Sends a newsletter to all registered emails
 	// (POST /sendNewsletter)
 	PostSendNewsletter(w http.ResponseWriter, r *http.Request)
 	// Deletes a tag

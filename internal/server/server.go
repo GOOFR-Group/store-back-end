@@ -30,6 +30,7 @@ func RunServer(ctx context.Context) error {
 	conf.InitApp()
 	conf.InitServer()
 	conf.InitDB()
+	conf.InitSMTP()
 	conf.InitRouter()
 	storage.InitStorage()
 
@@ -38,14 +39,14 @@ func RunServer(ctx context.Context) error {
 		return err
 	}
 
-	port := conf.GetPort()
+	port := conf.Port()
 
 	// log this service as a whole
 	logging.AppLogger.Info().Str("version", core.Version().Version).Str("notes", core.Version().Notes).Msg("GOOFR Store API")
 	logging.AppLogger.Info().Msgf("Listening on port %d", port)
 
 	// add CORS options
-	handler := cors.New(CORSOptions).Handler(conf.GetRouter())
+	handler := cors.New(CORSOptions).Handler(conf.Router())
 
 	s := &http.Server{
 		ReadTimeout:  5 * time.Second,

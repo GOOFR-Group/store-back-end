@@ -7,10 +7,18 @@ const (
 	ErrInternalServer  = "internal server error"
 
 	// response
-	ErrParsingRequest = `error parsing request - %s`
+	ErrParsingRequest = `error parsing request: %s`
 )
 
 // tag
 const (
 	ErrTagNotFound = `tag not found with ID: %s`
+)
+
+// newsletter
+const (
+	ErrNewsletterEmailAlreadySubscribed = `email already subscribed: %s`
+	ErrNewsletterEmailNotYetSubscribed  = `email not yet subscribed: %s`
+	ErrNewsletterInvalidEmail           = `email is invalid: %s`
+	ErrNewsletterPublisherNotFound      = "one of the publishers sent were not found"
 )

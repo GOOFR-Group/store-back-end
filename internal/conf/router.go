@@ -15,7 +15,7 @@ func InitRouter() {
 	router = chi.NewRouter()
 }
 
-// GetRouter retrieves the router
-func GetRouter() *chi.Mux {
+// Router retrieves the router
+func Router() *chi.Mux {
 	return router
 }

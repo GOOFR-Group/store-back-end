@@ -13,7 +13,7 @@ type Tag struct {
 	Name string    `db:"name"`
 }
 
-func CreateNewTag(t Transaction, model Tag) error {
+func CreateTag(t Transaction, model Tag) error {
 	_, err := t.InsertInto(TagTable).
 		Columns(TagIDDb, TagNameDb).
 		Record(model).
@@ -22,7 +22,7 @@ func CreateNewTag(t Transaction, model Tag) error {
 	return err
 }
 
-func GetAllTags(t Transaction) (objects []Tag, err error) {
+func ReadAllTags(t Transaction) (objects []Tag, err error) {
 	_, err = t.Select("*").
 		From(TagTable).
 		Load(&objects)
@@ -30,7 +30,7 @@ func GetAllTags(t Transaction) (objects []Tag, err error) {
 	return
 }
 
-func GetTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
+func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	err = t.Select("*").
 		From(TagTable).
 		Where(TagIDDb+" = ?", id).
@@ -45,21 +45,15 @@ func GetTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	return
 }
 
-func UpdateTagByID(t Transaction, model Tag) (ok bool, err error) {
-	_, err = t.Update(TagTable).
+func UpdateTagByID(t Transaction, model Tag) error {
+	_, err := t.Update(TagTable).
 		SetMap(map[string]interface{}{
 			TagNameDb: model.Name,
 		}).
 		Where(TagIDDb+" = ?", model.ID).
 		Exec()
 
-	switch err {
-	case nil:
-		ok = true
-	case dbr.ErrNotFound:
-		err = nil
-	}
-	return
+	return err
 }
 
 func DeleteTagByID(t Transaction, id uuid.UUID) (ok bool, err error) {

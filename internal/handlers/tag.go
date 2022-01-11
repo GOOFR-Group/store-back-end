@@ -16,20 +16,14 @@ const handlerTag = "tag"
 func (*StoreImpl) PostTag(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrParsingRequest, err.Error())}
-		if err = writeResponse(w, response, http.StatusBadRequest, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeBadRequest(w, handlerTag, err)
 		return
 	}
 
 	req := oapi.PostTagJSONRequestBody{}
 	err = json.Unmarshal(body, &req)
 	if err != nil {
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrParsingRequest, err.Error())}
-		if err = writeResponse(w, response, http.StatusBadRequest, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeBadRequest(w, handlerTag, err)
 		return
 	}
 
@@ -37,12 +31,11 @@ func (*StoreImpl) PostTag(w http.ResponseWriter, r *http.Request) {
 	switch err {
 	case nil:
 	default:
-		logInternalError(handlerTag, ErrInternalServer, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		writeInternalServerError(w, handlerTag, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	writeCreated(w)
 }
 
 // GetTag handles the /tag Get endpoint
@@ -51,40 +44,28 @@ func (*StoreImpl) GetTag(w http.ResponseWriter, r *http.Request, params oapi.Get
 	switch err {
 	case nil:
 	case core.ErrObjectNotFound:
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrTagNotFound, *params.Id)}
-		if err = writeResponse(w, response, http.StatusNotFound, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeNotFound(w, handlerTag, fmt.Sprintf(ErrTagNotFound, *params.Id))
 		return
 	default:
-		logInternalError(handlerTag, ErrInternalServer, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		writeInternalServerError(w, handlerTag, err)
 		return
 	}
 
-	if err = writeResponse(w, response, http.StatusOK, header{contentTypeHeader, contentTypeJSON}); err != nil {
-		logInternalError(handlerTag, ErrWritingResponse, err)
-	}
+	writeOK(w, handlerTag, response)
 }
 
 // PutTag handles the /tag Put endpoint
 func (*StoreImpl) PutTag(w http.ResponseWriter, r *http.Request, params oapi.PutTagParams) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrParsingRequest, err.Error())}
-		if err = writeResponse(w, response, http.StatusBadRequest, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeBadRequest(w, handlerTag, err)
 		return
 	}
 
 	req := oapi.PutTagJSONRequestBody{}
 	err = json.Unmarshal(body, &req)
 	if err != nil {
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrParsingRequest, err.Error())}
-		if err = writeResponse(w, response, http.StatusBadRequest, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeBadRequest(w, handlerTag, err)
 		return
 	}
 
@@ -92,18 +73,14 @@ func (*StoreImpl) PutTag(w http.ResponseWriter, r *http.Request, params oapi.Put
 	switch err {
 	case nil:
 	case core.ErrObjectNotFound:
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrTagNotFound, params.Id)}
-		if err = writeResponse(w, response, http.StatusNotFound, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeNotFound(w, handlerTag, fmt.Sprintf(ErrTagNotFound, params.Id))
 		return
 	default:
-		logInternalError(handlerTag, ErrInternalServer, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		writeInternalServerError(w, handlerTag, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	writeNoContent(w)
 }
 
 // DeleteTag handles the /tag Delete endpoint
@@ -112,18 +89,12 @@ func (*StoreImpl) DeleteTag(w http.ResponseWriter, r *http.Request, params oapi.
 	switch err {
 	case nil:
 	case core.ErrObjectNotFound:
-		response := oapi.ErrorSchema{Error: fmt.Sprintf(ErrTagNotFound, params.Id)}
-		if err = writeResponse(w, response, http.StatusNotFound, header{contentTypeHeader, contentTypeJSON}); err != nil {
-			logInternalError(handlerTag, ErrWritingResponse, err)
-		}
+		writeNotFound(w, handlerTag, fmt.Sprintf(ErrTagNotFound, params.Id))
 		return
 	default:
-		logInternalError(handlerTag, ErrInternalServer, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		writeInternalServerError(w, handlerTag, err)
 		return
 	}
 
-	if err = writeResponse(w, response, http.StatusOK, header{contentTypeHeader, contentTypeJSON}); err != nil {
-		logInternalError(handlerTag, ErrWritingResponse, err)
-	}
+	writeOK(w, handlerTag, response)
 }
