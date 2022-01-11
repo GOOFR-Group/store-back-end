@@ -6,11 +6,11 @@ require (
 	github.com/deepmap/oapi-codegen v1.9.0
 	github.com/getkin/kin-openapi v0.87.0
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/cors v1.2.0
 	github.com/go-openapi/runtime v0.21.0
 	github.com/gocraft/dbr/v2 v2.7.3
 	github.com/google/uuid v1.1.1
 	github.com/lib/pq v1.10.4
-	github.com/rs/cors v1.8.2
 	github.com/rs/zerolog v1.26.1
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
 )

@@ -32,6 +32,7 @@ func (*StoreImpl) PostPublisher(w http.ResponseWriter, r *http.Request) {
 	case nil:
 	case core.ErrObjectNotFound:
 		writeInternalServerError(w, handlerPublisher, err)
+		return
 	default:
 		writeInternalServerError(w, handlerPublisher, err)
 		return

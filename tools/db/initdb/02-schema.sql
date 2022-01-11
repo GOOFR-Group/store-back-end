@@ -138,7 +138,7 @@ ALTER TABLE "access" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON
 
 ALTER TABLE "wallet" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "client" ADD FOREIGN KEY ("id") REFERENCES "address" ("id_client") ON DELETE CASCADE;
+ALTER TABLE "address" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "game" ADD FOREIGN KEY ("id_publisher") REFERENCES "publisher" ("id");
 

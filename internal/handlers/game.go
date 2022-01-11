@@ -32,8 +32,10 @@ func (*StoreImpl) PostGame(w http.ResponseWriter, r *http.Request) {
 	case nil:
 	case core.ErrPublisherNotFound:
 		writeNotFound(w, handlerGame, fmt.Sprintf(ErrPublisherNotFound, req.IdPublisher))
+		return
 	case core.ErrObjectNotFound:
 		writeInternalServerError(w, handlerGame, err)
+		return
 	default:
 		writeInternalServerError(w, handlerGame, err)
 		return
