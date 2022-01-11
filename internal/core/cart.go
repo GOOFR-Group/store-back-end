@@ -217,7 +217,7 @@ func GetCartPurchase(params oapi.GetCartPurchaseParams) (oapi.InvoiceSchema, err
 		}
 
 		for _, g := range games {
-			total += g.Price * (1 + mathf.Clamp(g.Discount, 0, 1))
+			total += g.Price * (1 - mathf.Clamp(g.Discount, 0, 1))
 		}
 
 		if clientWallet, ok, err = storage.ReadWalletByClientID(tx, client.ID); err != nil {
