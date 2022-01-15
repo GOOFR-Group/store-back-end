@@ -137,16 +137,14 @@ func PostSendNewsletter(req oapi.PostSendNewsletterJSONRequestBody) error {
 			return err
 		}
 
-		year, month, day := g.ReleaseDate.Date()
-
 		body += `<div style="margin: 0px 50px; margin-bottom: 15px;">`
 		body += fmt.Sprintf(`<img style="width: auto; height: 135px;" src="%s">`, g.CoverImage)
 		body += `<div style="padding-top: 10px; float: right; color: #E0E1DD;"> <table> `
 		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%s</td> </tr>`, "Name", g.Name)
 		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%s</td> </tr>`, "Publisher", publisher.Name)
 		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">€%.2f</td> </tr>`, "Price", g.Price)
-		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">-%.2f%%</td> </tr>`, "Discount", g.Discount*100)
-		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%d/%d/%d</td> </tr>`, "Release Date", day, month, year)
+		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%.2f%%</td> </tr>`, "Discount", g.Discount*100)
+		body += fmt.Sprintf(`<tr> <th style="text-align: right;">%s</th> <td style="padding-left: 15px;">%s</td> </tr>`, "Release Date", g.ReleaseDate.Format(timeLayout))
 		body += `</table> </div> </div>`
 	}
 
