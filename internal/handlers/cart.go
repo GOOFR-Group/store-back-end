@@ -22,7 +22,7 @@ func (*StoreImpl) PostCart(w http.ResponseWriter, r *http.Request, params oapi.P
 		writeNotFound(w, handlerCart, fmt.Sprintf(ErrGameNotFound, params.GameID))
 		return
 	case core.ErrGameAlreadyBought:
-		writeConflict(w, handlerCart, ErrCartGameAlreadyBought)
+		writeConflict(w, handlerCart, ErrGameAlreadyBought)
 		return
 	case core.ErrObjectAlreadyCreated:
 		writeConflict(w, handlerCart, ErrCartGameAlreadyAdded)

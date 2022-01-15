@@ -12,7 +12,8 @@ const (
 
 // game
 const (
-	ErrGameNotFound = "game not found with ID: %s"
+	ErrGameNotFound      = "game not found with ID: %s"
+	ErrGameAlreadyBought = "client already has the given game in his library"
 )
 
 // game tag
@@ -59,11 +60,16 @@ const (
 
 // cart
 const (
-	ErrCartGameAlreadyBought   = "client already has the given game in his library"
 	ErrCartGameAlreadyAdded    = "client already has the given game in his cart"
 	ErrCartGameNotAdded        = "client does not have this game in his cart"
 	ErrCartInsufficientBalance = "client does not have enough balance"
 	ErrCartEmpty               = "client has no games in his cart"
+)
+
+// wishlist
+const (
+	ErrWishlistGameAlreadyAdded = "client already has the given game in his wishlist"
+	ErrWishlistGameNotAdded     = "client does not have this game in his wishlist"
 )
 
 // review
