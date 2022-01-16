@@ -1189,7 +1189,7 @@ paths:
 
     delete: 
       summary: "Removes a game from the client's cart"
-      description: "Removes a game from the client cart by ID or removes all games from its cart if no ID is given"
+      description: "Removes a game from the client cart by ID or removes all games from its cart if no game ID is given"
       tags:
         - Cart
       parameters:
@@ -1346,7 +1346,7 @@ paths:
 
     delete: 
       summary: "Removes a game from the client's wishlist"
-      description: "Removes a game from the client wishlist by ID or removes all games from its wishlist if no ID is given"
+      description: "Removes a game from the client wishlist by ID or removes all games from its wishlist if no game ID is given"
       tags:
         - Wishlist
       parameters:

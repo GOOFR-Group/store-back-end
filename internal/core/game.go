@@ -2,9 +2,11 @@ package core
 
 import (
 	"fmt"
+	"net/smtp"
 
 	openapi_types "github.com/deepmap/oapi-codegen/pkg/types"
 	"github.com/gocraft/dbr/v2"
+	"github.com/goofr-group/store-back-end/internal/conf"
 	"github.com/goofr-group/store-back-end/internal/oapi"
 	"github.com/goofr-group/store-back-end/internal/storage"
 	"github.com/google/uuid"
@@ -119,6 +121,7 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 		return oapi.GameSchema{}, err
 	}
 
+	var prevObject storage.Game
 	var object storage.Game
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
@@ -129,6 +132,13 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 		}
 		if !ok {
 			return ErrPublisherNotFound
+		}
+
+		if prevObject, ok, err = storage.ReadGameByID(tx, id); err != nil {
+			return err
+		}
+		if !ok {
+			return ErrObjectNotFound
 		}
 
 		if err = storage.UpdateGameByID(tx, storage.Game{
@@ -156,6 +166,64 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 		return nil
 	}); err != nil {
 		return oapi.GameSchema{}, err
+	}
+
+	if prevObject.State == storage.StateGameUpcoming && object.State == storage.StateGameActive {
+		var emails []string
+
+		if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
+			if emails, err = storage.ReadClientEmailsByGameInLibrary(tx, object.ID); err != nil {
+				return err
+			}
+
+			return nil
+		}); err != nil {
+			return oapi.GameSchema{}, err
+		}
+
+		title := "GOOFR Store - Game Release"
+
+		body := "You don't have to wait any longer!\n"
+		body += "One of the games you had bought has just been released.\n"
+		body += "Game:\n"
+		body += fmt.Sprintf("\tName: %s\n", object.Name)
+		body += fmt.Sprintf("\tDescription: %s\n", object.Description)
+		body += fmt.Sprintf("\tRelease Date: %s\n", object.ReleaseDate.Format(timeLayout))
+		body += fmt.Sprintf("\tPrice: €%.2f", object.Price)
+
+		message := []byte(fmt.Sprintf(smtpSubject, title) + body)
+		if err = smtp.SendMail(conf.SMTPAddress(), conf.SMTPAuthentication(), conf.SMTPEmailAddress(), emails, message); err != nil {
+			return oapi.GameSchema{}, err
+		}
+	}
+
+	if prevObject.Discount != object.Discount && object.Discount > 0 {
+		var emails []string
+
+		if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
+			if emails, err = storage.ReadClientEmailsByGameInWishlis(tx, object.ID); err != nil {
+				return err
+			}
+
+			return nil
+		}); err != nil {
+			return oapi.GameSchema{}, err
+		}
+
+		title := "GOOFR Store - Game Discount"
+
+		body := "We have got good news!\n"
+		body += "One of the games on your wishlist just got a discount.\n"
+		body += "Game:\n"
+		body += fmt.Sprintf("\tName: %s\n", object.Name)
+		body += fmt.Sprintf("\tDescription: %s\n", object.Description)
+		body += fmt.Sprintf("\tPrice: €%.2f\n", object.Price)
+		body += fmt.Sprintf("\tDiscount: %.2f%%", object.Discount)
+
+		message := []byte(fmt.Sprintf(smtpSubject, title) + body)
+		if err = smtp.SendMail(conf.SMTPAddress(), conf.SMTPAuthentication(), conf.SMTPEmailAddress(), emails, message); err != nil {
+			return oapi.GameSchema{}, err
+		}
 	}
 
 	return getGameFromModel(object), nil
