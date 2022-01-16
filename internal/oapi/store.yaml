@@ -2221,8 +2221,7 @@ components:
           type: number
           format: double
         coin:
-          type: integer
-          format: int32
+          type: string
     
     RegisterClientSchema:
       type: object

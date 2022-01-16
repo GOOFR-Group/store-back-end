@@ -53,7 +53,7 @@ type ClientSchema struct {
 // ClientWalletSchema defines model for ClientWalletSchema.
 type ClientWalletSchema struct {
 	Balance  float64 `json:"balance"`
-	Coin     int32   `json:"coin"`
+	Coin     string  `json:"coin"`
 	Id       *string `json:"id,omitempty"`
 	IdClient *string `json:"id_client,omitempty"`
 }

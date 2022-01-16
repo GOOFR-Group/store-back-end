@@ -19,9 +19,11 @@ var (
 
 // specific
 var (
-	ErrGameNotFound      = errors.New("failed to find game")
-	ErrPublisherNotFound = errors.New("failed to find publisher")
-	ErrClientNotFound    = errors.New("failed to find client")
-	ErrClientInactive    = errors.New("inactive client")
-	ErrTagNotFound       = errors.New("failed to find tag")
+	ErrGameNotFound          = errors.New("failed to find game")
+	ErrPublisherNotFound     = errors.New("failed to find publisher")
+	ErrClientNotFound        = errors.New("failed to find client")
+	ErrTagNotFound           = errors.New("failed to find tag")
+	ErrInvoiceHeaderNotFound = errors.New("failed to find invoice header")
+	ErrClientInactive        = errors.New("inactive client")
+	ErrGameAlreadyBought     = errors.New("game already bought")
 )
