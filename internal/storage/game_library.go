@@ -47,3 +47,14 @@ func ReadGameLibraryByID(t Transaction, gameID, clientID uuid.UUID) (object Game
 	}
 	return
 }
+
+func ReadClientEmailsByGameInLibrary(t Transaction, gameID uuid.UUID) (objects []string, err error) {
+	_, err = t.Select(AccessTable+"."+AccessEmailDb).
+		From(AccessTable).
+		Join(ClientTable, AccessTable+"."+AccessIDClientDb+" = "+ClientTable+"."+ClientIDDb).
+		Join(GameLibraryTable, ClientTable+"."+ClientIDDb+" = "+GameLibraryTable+"."+GameLibraryIDClientDb).
+		Where(GameLibraryTable+"."+GameLibraryIDGameDb+" = ?", gameID).
+		Load(&objects)
+
+	return
+}

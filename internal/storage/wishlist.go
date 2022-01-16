@@ -48,6 +48,17 @@ func ReadWishlistByID(t Transaction, gameID, clientID uuid.UUID) (object Wishlis
 	return
 }
 
+func ReadClientEmailsByGameInWishlis(t Transaction, gameID uuid.UUID) (objects []string, err error) {
+	_, err = t.Select(AccessTable+"."+AccessEmailDb).
+		From(AccessTable).
+		Join(ClientTable, AccessTable+"."+AccessIDClientDb+" = "+ClientTable+"."+ClientIDDb).
+		Join(WishlistTable, ClientTable+"."+ClientIDDb+" = "+WishlistTable+"."+WishlistIDClientDb).
+		Where(WishlistTable+"."+WishlistIDGameDb+" = ?", gameID).
+		Load(&objects)
+
+	return
+}
+
 func DeleteWishlistByID(t Transaction, gameID, clientID uuid.UUID) error {
 	_, err := t.DeleteFrom(WishlistTable).
 		Where(WishlistIDGameDb+" = ?", gameID).
