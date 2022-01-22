@@ -50,6 +50,20 @@ func ReadTagsByGameID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
 	return
 }
 
+func ReadTagsByClientID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
+	_, err = t.Select("DISTINCT "+TagTable+".*").
+		From(TagTable).
+		Join(TagGameTable, TagTable+"."+TagIDDb+" = "+TagGameTable+"."+TagGameIDTagDb).
+		Join(GameTable, TagGameTable+"."+TagGameIDGameDb+" = "+GameTable+"."+GameIDDb).
+		Join(ClientSearchHistoryTable, GameTable+"."+GameIDDb+" = "+ClientSearchHistoryTable+"."+ClientSearchHistoryIDGameDb).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		Where(ClientSearchHistoryTable+"."+ClientSearchHistoryIDClientDb+" = ?", id).
+		Where(GameLibraryTable+"."+GameLibraryIDClientDb+" = ?", id).
+		Load(&objects)
+
+	return
+}
+
 func ReadTagByID(t Transaction, id uuid.UUID) (object Tag, ok bool, err error) {
 	err = t.Select("*").
 		From(TagTable).

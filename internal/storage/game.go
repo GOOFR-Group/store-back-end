@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"strings"
 	"time"
 
 	"github.com/gocraft/dbr/v2"
@@ -42,6 +43,31 @@ func ReadGames(t Transaction) (objects []Game, err error) {
 	return
 }
 
+func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (objects []Game, err error) {
+	idsString := make([]string, len(ids))
+	for i, id := range ids {
+		idsString[i] = id.String()
+	}
+
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameIDDb+" NOT IN (?)", strings.Join(idsString, ", ")).
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesWithDiscount(t Transaction, limit int64) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameDiscountDb+" > ?", 0).
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
 func ReadGamesByNameLike(t Transaction, like string, limit int64) (objects []Game, err error) {
 	_, err = t.Select("*").
 		From(GameTable).
@@ -59,6 +85,101 @@ func ReadGamesOrderByAvgReviewDesc(t Transaction, limit int64) (objects []Game, 
 		Where(ReviewTable + "." + ReviewStarsDb + " IS NOT NULL").
 		GroupBy(GameTable + "." + GameIDDb).
 		OrderDesc("AVG(" + ReviewTable + "." + ReviewStarsDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesOrderByReleaseDateDescAndByAvgReviewDesc(t Transaction, limit int64) (objects []Game, err error) {
+	_, err = t.Select(GameTable+".*").
+		From(GameTable).
+		Join(ReviewTable, GameTable+"."+GameIDDb+" = "+ReviewTable+"."+ReviewIDGameDb).
+		Where(ReviewTable + "." + ReviewStarsDb + " IS NOT NULL").
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc(GameTable + "." + GameReleaseDateDb).
+		OrderDesc("AVG(" + ReviewTable + "." + ReviewStarsDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesOrderByReleaseDateDesc(t Transaction, limit int64) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		OrderDesc(GameReleaseDateDb).
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesOrderByReleaseDateDescFilteredByTag(t Transaction, tags []uuid.UUID, limit int64) (objects []Game, err error) {
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameIDDb+" IN (?)", readGamesIDFilteredByTag(t, tags)).
+		OrderDesc(GameReleaseDateDb).
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesMostPurchasedOrderByAvgReviewDesc(t Transaction, limit int64) (objects []Game, err error) {
+	_, err = t.Select(GameTable+".*").
+		From(GameTable).
+		Join(ReviewTable, GameTable+"."+GameIDDb+" = "+ReviewTable+"."+ReviewIDGameDb).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		Where(ReviewTable + "." + ReviewStarsDb + " IS NOT NULL").
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc("COUNT(" + GameLibraryTable + "." + GameLibraryIDGameDb + ")").
+		OrderDesc("AVG(" + ReviewTable + "." + ReviewStarsDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesMostPurchased(t Transaction, limit int64) (objects []Game, err error) {
+	_, err = t.Select(GameTable+".*").
+		From(GameTable).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc("COUNT(" + GameLibraryTable + "." + GameLibraryIDGameDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesMostPurchasedFilteredByTag(t Transaction, tags []uuid.UUID, limit int64) (objects []Game, err error) {
+	_, err = t.Select(GameTable+".*").
+		From(GameTable).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		Where(GameTable+"."+GameIDDb+" IN (?)", readGamesIDFilteredByTag(t, tags)).
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc("COUNT(" + GameLibraryTable + "." + GameLibraryIDGameDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects)
+
+	return
+}
+
+func ReadGamesRecommendedByClientID(t Transaction, id uuid.UUID, limit int64) (objects []Game, err error) {
+	var tags []Tag
+	if tags, err = ReadTagsByClientID(t, id); err != nil {
+		return
+	}
+
+	tagsID := make([]uuid.UUID, len(tags))
+	for i, tag := range tags {
+		tagsID[i] = tag.ID
+	}
+
+	_, err = t.Select("*").
+		From(GameTable).
+		Where(GameIDDb+" IN (?)", readGamesIDFilteredByTag(t, tagsID)).
 		Limit(uint64(limit)).
 		Load(&objects)
 
@@ -115,4 +236,17 @@ func DeleteGameByID(t Transaction, id uuid.UUID) error {
 		Exec()
 
 	return err
+}
+
+func readGamesIDFilteredByTag(t Transaction, tags []uuid.UUID) *dbr.SelectStmt {
+	tagsString := make([]string, len(tags))
+	for i, t := range tags {
+		tagsString[i] = t.String()
+	}
+
+	return t.Select("DISTINCT "+GameTable+"."+GameIDDb).
+		From(GameTable).
+		Join(TagGameTable, GameTable+"."+GameIDDb+" = "+TagGameTable+"."+TagGameIDGameDb).
+		Join(TagTable, TagGameTable+"."+TagGameIDTagDb+" = "+TagTable+"."+TagIDDb).
+		Where(TagTable+"."+TagIDDb+" IN (?)", strings.Join(tagsString, ", "))
 }
