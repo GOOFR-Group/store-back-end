@@ -2003,7 +2003,7 @@ paths:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/GameSchema'
+                  $ref: '#/components/schemas/TopReviewsSchema'
                   
 components:
   schemas:
@@ -2346,6 +2346,18 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/GameSchema'
+    
+    TopReviewsSchema:
+      type: object
+      required:
+        - game
+        - average
+      properties:
+        game: 
+          $ref: '#/components/schemas/GameSchema'
+        average:
+          type: number
+          format: double
     
     VersionSchema:
       type: object

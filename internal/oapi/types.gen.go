@@ -166,6 +166,12 @@ type TagSchema struct {
 	Name string  `json:"name"`
 }
 
+// TopReviewsSchema defines model for TopReviewsSchema.
+type TopReviewsSchema struct {
+	Average float64    `json:"average"`
+	Game    GameSchema `json:"game"`
+}
+
 // VersionSchema defines model for VersionSchema.
 type VersionSchema struct {
 	Notes   string `json:"notes"`
