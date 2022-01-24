@@ -45,6 +45,10 @@ func PostLogin(req oapi.PostLoginJSONRequestBody) (oapi.ClientSchema, error) {
 		return oapi.ClientSchema{}, ErrPasswordRequired
 	}
 
+	if req.Oauth != access.OAuth {
+		return oapi.ClientSchema{}, ErrIncorrectPassword
+	}
+
 	if req.Password != nil && !access.OAuth {
 		if !access.Password.Valid {
 			return oapi.ClientSchema{}, ErrIncorrectPassword
