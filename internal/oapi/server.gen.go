@@ -1983,15 +1983,12 @@ func (siw *ServerInterfaceWrapper) GetYourStore(w http.ResponseWriter, r *http.R
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetYourStoreParams
 
-	// ------------- Required query parameter "id" -------------
+	// ------------- Optional query parameter "id" -------------
 	if paramValue := r.URL.Query().Get("id"); paramValue != "" {
 
-	} else {
-		siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "id"})
-		return
 	}
 
-	err = runtime.BindQueryParameter("form", true, true, "id", r.URL.Query(), &params.Id)
+	err = runtime.BindQueryParameter("form", true, false, "id", r.URL.Query(), &params.Id)
 	if err != nil {
 		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "id", Err: err})
 		return

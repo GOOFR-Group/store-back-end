@@ -49,6 +49,15 @@ func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (obje
 		idsString[i] = id.String()
 	}
 
+	if len(ids) == 0 {
+		_, err = t.Select("*").
+			From(GameTable).
+			Limit(uint64(limit)).
+			Load(&objects)
+
+		return
+	}
+
 	_, err = t.Select("*").
 		From(GameTable).
 		Where(GameIDDb+" NOT IN (?)", strings.Join(idsString, ", ")).
@@ -140,6 +149,10 @@ func ReadGamesOrderByReleaseDateDesc(t Transaction, limit int64) (objects []Game
 }
 
 func ReadGamesOrderByReleaseDateDescFilteredByTag(t Transaction, tags []uuid.UUID, limit int64) (objects []Game, err error) {
+	if len(tags) == 0 {
+		return
+	}
+
 	_, err = t.Select("*").
 		From(GameTable).
 		Where(GameIDDb+" IN (?)", readGamesIDFilteredByTag(t, tags)).
@@ -178,6 +191,10 @@ func ReadGamesMostPurchased(t Transaction, limit int64) (objects []Game, err err
 }
 
 func ReadGamesMostPurchasedFilteredByTag(t Transaction, tags []uuid.UUID, limit int64) (objects []Game, err error) {
+	if len(tags) == 0 {
+		return
+	}
+
 	_, err = t.Select(GameTable+".*").
 		From(GameTable).
 		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
@@ -199,6 +216,10 @@ func ReadGamesRecommendedByClientID(t Transaction, id uuid.UUID, limit int64) (o
 	tagsID := make([]uuid.UUID, len(tags))
 	for i, tag := range tags {
 		tagsID[i] = tag.ID
+	}
+
+	if len(tagsID) == 0 {
+		return
 	}
 
 	_, err = t.Select("*").
@@ -263,6 +284,10 @@ func DeleteGameByID(t Transaction, id uuid.UUID) error {
 }
 
 func readGamesIDFilteredByTag(t Transaction, tags []uuid.UUID) *dbr.SelectStmt {
+	if len(tags) == 0 {
+		return t.Select()
+	}
+
 	tagsString := make([]string, len(tags))
 	for i, t := range tags {
 		tagsString[i] = t.String()

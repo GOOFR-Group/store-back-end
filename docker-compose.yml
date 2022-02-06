@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     healthcheck:
       test: nc -vz localhost 5432
+    ports:
+      - 5432:5432
     restart: unless-stopped
     secrets:
       - postgres_password
