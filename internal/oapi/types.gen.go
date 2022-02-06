@@ -531,7 +531,7 @@ type PostWishlistParams struct {
 // GetYourStoreParams defines parameters for GetYourStore.
 type GetYourStoreParams struct {
 	// Client ID
-	Id string `json:"id"`
+	Id *string `json:"id,omitempty"`
 }
 
 // PutAccessJSONRequestBody defines body for PutAccess for application/json ContentType.

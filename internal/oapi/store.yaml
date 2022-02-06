@@ -55,7 +55,6 @@ paths:
           name: id
           schema:
             type: string
-          required: true
           description: "Client ID"
       responses:
         '500':
