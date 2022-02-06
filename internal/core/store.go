@@ -8,31 +8,39 @@ import (
 )
 
 const storeGamesLimit = 50
+const featuredGamesLimit = 5
+const yourStoreGamesLimit = 3
 
 // GetYourStore client's main store
 func GetYourStore(params oapi.GetYourStoreParams) (oapi.YourStoreSchema, error) {
-	var idClient uuid.UUID
-	var err error
-
-	if idClient, err = uuid.Parse(params.Id); err != nil {
-		return oapi.YourStoreSchema{}, err
-	}
-
 	var featuredGames []storage.Game
 	var recommendedGames []storage.Game
 	var specialOffersGames []storage.Game
 	var discoverGames []storage.Game
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
-		if featuredGames, err = storage.ReadGamesMostPurchasedOrderByAvgReviewDesc(tx, storeGamesLimit); err != nil {
+		var err error
+
+		if featuredGames, err = storage.ReadGamesMostPurchasedOrderByAvgReviewDesc(tx, featuredGamesLimit); err != nil {
 			return err
 		}
 
-		if recommendedGames, err = storage.ReadGamesRecommendedByClientID(tx, idClient, storeGamesLimit); err != nil {
-			return err
+		if params.Id == nil {
+			if recommendedGames, err = storage.ReadGamesOrderByAvgReviewDesc(tx, yourStoreGamesLimit); err != nil {
+				return err
+			}
+		} else {
+			var idClient uuid.UUID
+			if idClient, err = uuid.Parse(*params.Id); err != nil {
+				return err
+			}
+
+			if recommendedGames, err = storage.ReadGamesRecommendedByClientID(tx, idClient, yourStoreGamesLimit); err != nil {
+				return err
+			}
 		}
 
-		if specialOffersGames, err = storage.ReadGamesWithDiscount(tx, storeGamesLimit); err != nil {
+		if specialOffersGames, err = storage.ReadGamesWithDiscount(tx, yourStoreGamesLimit); err != nil {
 			return err
 		}
 
@@ -47,7 +55,7 @@ func GetYourStore(params oapi.GetYourStoreParams) (oapi.YourStoreSchema, error) 
 			ids = append(ids, g.ID)
 		}
 
-		if discoverGames, err = storage.ReadGamesWithDifferentID(tx, ids, storeGamesLimit); err != nil {
+		if discoverGames, err = storage.ReadGamesWithDifferentID(tx, ids, yourStoreGamesLimit); err != nil {
 			return err
 		}
 
@@ -72,7 +80,7 @@ func GetNewStore(params oapi.GetNewStoreParams) (oapi.NewStoreSchema, error) {
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
 
-		if featuredGames, err = storage.ReadGamesOrderByReleaseDateDescAndByAvgReviewDesc(tx, storeGamesLimit); err != nil {
+		if featuredGames, err = storage.ReadGamesOrderByReleaseDateDescAndByAvgReviewDesc(tx, featuredGamesLimit); err != nil {
 			return err
 		}
 
@@ -114,7 +122,7 @@ func GetNoteworthyStore(params oapi.GetNoteworthyStoreParams) (oapi.NoteworthySt
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
 
-		if featuredGames, err = storage.ReadGamesMostPurchasedOrderByAvgReviewDesc(tx, storeGamesLimit); err != nil {
+		if featuredGames, err = storage.ReadGamesMostPurchasedOrderByAvgReviewDesc(tx, featuredGamesLimit); err != nil {
 			return err
 		}
 
