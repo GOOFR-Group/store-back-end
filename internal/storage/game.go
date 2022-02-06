@@ -49,6 +49,15 @@ func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (obje
 		idsString[i] = id.String()
 	}
 
+	if len(ids) == 0 {
+		_, err = t.Select("*").
+			From(GameTable).
+			Limit(uint64(limit)).
+			Load(&objects)
+
+		return
+	}
+
 	_, err = t.Select("*").
 		From(GameTable).
 		Where(GameIDDb+" NOT IN (?)", strings.Join(idsString, ", ")).
