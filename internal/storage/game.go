@@ -47,7 +47,7 @@ func ReadGames(t Transaction) (objects []Game, err error) {
 func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (objects []Game, err error) {
 	idsString := make([]string, len(ids))
 	for i, id := range ids {
-		idsString[i] = id.String()
+		idsString[i] = fmt.Sprintf(`'%s'`, id.String())
 	}
 
 	if len(ids) == 0 {
