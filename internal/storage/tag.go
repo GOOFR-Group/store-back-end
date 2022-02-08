@@ -53,12 +53,11 @@ func ReadTagsByGameID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
 func ReadTagsByClientID(t Transaction, id uuid.UUID) (objects []Tag, err error) {
 	_, err = t.Select("DISTINCT "+TagTable+".*").
 		From(TagTable).
-		Join(TagGameTable, TagTable+"."+TagIDDb+" = "+TagGameTable+"."+TagGameIDTagDb).
-		Join(GameTable, TagGameTable+"."+TagGameIDGameDb+" = "+GameTable+"."+GameIDDb).
-		Join(ClientSearchHistoryTable, GameTable+"."+GameIDDb+" = "+ClientSearchHistoryTable+"."+ClientSearchHistoryIDGameDb).
-		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
-		Where(ClientSearchHistoryTable+"."+ClientSearchHistoryIDClientDb+" = ?", id).
-		Where(GameLibraryTable+"."+GameLibraryIDClientDb+" = ?", id).
+		FullJoin(TagGameTable, TagTable+"."+TagIDDb+" = "+TagGameTable+"."+TagGameIDTagDb).
+		FullJoin(GameTable, TagGameTable+"."+TagGameIDGameDb+" = "+GameTable+"."+GameIDDb).
+		FullJoin(ClientSearchHistoryTable, GameTable+"."+GameIDDb+" = "+ClientSearchHistoryTable+"."+ClientSearchHistoryIDGameDb).
+		FullJoin(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		Where(ClientSearchHistoryTable+"."+ClientSearchHistoryIDClientDb+" = ? OR "+GameLibraryTable+"."+GameLibraryIDClientDb+" = ?", id, id).
 		Load(&objects)
 
 	return
