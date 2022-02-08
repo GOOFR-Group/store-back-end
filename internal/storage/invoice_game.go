@@ -24,7 +24,7 @@ func CreateInvoiceGame(t Transaction, model InvoiceGame) error {
 }
 
 func ReadInvoiceGamesByInvoiceID(t Transaction, id uuid.UUID) (objects []InvoiceGame, err error) {
-	_, err = t.Select(InvoiceGameTable).
+	_, err = t.Select("*").
 		From(InvoiceGameTable).
 		Where(InvoiceGameIDInvoiceDb+" = ?", id).
 		Load(&objects)
