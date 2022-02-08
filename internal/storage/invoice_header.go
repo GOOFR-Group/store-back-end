@@ -27,7 +27,7 @@ func CreateInvoiceHeader(t Transaction, model InvoiceHeader) error {
 }
 
 func ReadInvoiceHeadersByClientID(t Transaction, id uuid.UUID) (objects []InvoiceHeader, err error) {
-	_, err = t.Select(InvoiceHeaderTable).
+	_, err = t.Select("*").
 		From(InvoiceHeaderTable).
 		Where(InvoiceHeaderIDClientDb+" = ?", id).
 		OrderDesc(InvoiceHeaderPurchaseDateDb).
