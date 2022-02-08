@@ -291,7 +291,7 @@ func readGamesIDFilteredByTag(t Transaction, tags []uuid.UUID) *dbr.SelectStmt {
 
 	tagsString := make([]string, len(tags))
 	for i, t := range tags {
-		tagsString[i] = fmt.Sprintf("'%s'", t.String())
+		tagsString[i] = fmt.Sprintf(`'%s'`, t.String())
 	}
 
 	return t.Select("DISTINCT "+GameTable+"."+GameIDDb).
