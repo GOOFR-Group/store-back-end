@@ -1,9 +1,3 @@
-CREATE TYPE "state_game" AS ENUM (
-  'active',
-  'inactive',
-  'upcoming'
-);
-
 CREATE TABLE "client" (
   "id" uuid PRIMARY KEY,
   "name" varchar NOT NULL,
@@ -61,7 +55,7 @@ CREATE TABLE "game" (
   "name" varchar NOT NULL,
   "price" float NOT NULL,
   "discount" float NOT NULL,
-  "state" state_game NOT NULL,
+  "state" varchar NOT NULL,
   "cover_image" varchar NOT NULL,
   "release_date" date NOT NULL,
   "description" varchar NOT NULL,
