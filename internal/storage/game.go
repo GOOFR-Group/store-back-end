@@ -46,7 +46,7 @@ func ReadGames(t Transaction) (objects []Game, err error) {
 func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (objects []Game, err error) {
 	idsString := make([]string, len(ids))
 	for i, id := range ids {
-		idsString[i] = id.String()
+		idsString[i] = "'" + id.String() + "'"
 	}
 
 	if len(ids) == 0 {
@@ -60,7 +60,7 @@ func ReadGamesWithDifferentID(t Transaction, ids []uuid.UUID, limit int64) (obje
 
 	_, err = t.Select("*").
 		From(GameTable).
-		Where(GameIDDb+" NOT IN (?)", strings.Join(idsString, ", ")).
+		Where(GameIDDb + " NOT IN (" + strings.Join(idsString, ", ") + ")").
 		Limit(uint64(limit)).
 		Load(&objects)
 
@@ -290,12 +290,12 @@ func readGamesIDFilteredByTag(t Transaction, tags []uuid.UUID) *dbr.SelectStmt {
 
 	tagsString := make([]string, len(tags))
 	for i, t := range tags {
-		tagsString[i] = t.String()
+		tagsString[i] = "'" + t.String() + "'"
 	}
 
 	return t.Select("DISTINCT "+GameTable+"."+GameIDDb).
 		From(GameTable).
 		Join(TagGameTable, GameTable+"."+GameIDDb+" = "+TagGameTable+"."+TagGameIDGameDb).
 		Join(TagTable, TagGameTable+"."+TagGameIDTagDb+" = "+TagTable+"."+TagIDDb).
-		Where(TagTable+"."+TagIDDb+" IN (?)", strings.Join(tagsString, ", "))
+		Where(TagTable + "." + TagIDDb + " IN (" + strings.Join(tagsString, ", ") + ")")
 }
