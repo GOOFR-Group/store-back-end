@@ -57,7 +57,7 @@ func ReadTagsByClientID(t Transaction, id uuid.UUID) (objects []Tag, err error) 
 		FullJoin(GameTable, TagGameTable+"."+TagGameIDGameDb+" = "+GameTable+"."+GameIDDb).
 		FullJoin(ClientSearchHistoryTable, GameTable+"."+GameIDDb+" = "+ClientSearchHistoryTable+"."+ClientSearchHistoryIDGameDb).
 		FullJoin(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
-		Where(ClientSearchHistoryTable+"."+ClientSearchHistoryIDClientDb+" = ? OR "+GameLibraryTable+"."+GameLibraryIDClientDb+" = ?", id, id).
+		Where("("+ClientSearchHistoryTable+"."+ClientSearchHistoryIDClientDb+" = ? OR "+GameLibraryTable+"."+GameLibraryIDClientDb+" = ?) AND ("+TagTable+"."+TagIDDb+" IS NOT NULL AND "+TagTable+"."+TagNameDb+"IS NOT NULL)", id, id).
 		Load(&objects)
 
 	return
