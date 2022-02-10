@@ -42,6 +42,7 @@ func ReadNewsletterByID(t Transaction, email string) (object Newsletter, ok bool
 	}
 	return
 }
+
 func DeleteNewsletterByID(t Transaction, email string) error {
 	_, err := t.DeleteFrom(NewsletterTable).
 		Where(NewsletterEmailDb+" = ?", email).

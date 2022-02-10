@@ -45,14 +45,31 @@ func PostNewsletter(params oapi.PostNewsletterParams) error {
 }
 
 // GetNewsletter gets the list of email subscribed to the newsletter
-func GetNewsletter() ([]oapi.NewsletterSchema, error) {
+func GetNewsletter(params oapi.GetNewsletterParams) ([]oapi.NewsletterSchema, error) {
 	var objects []storage.Newsletter
 
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
-		objects, err = storage.ReadNewsletters(tx)
 
-		return err
+		if params.Email == nil {
+			if objects, err = storage.ReadNewsletters(tx); err != nil {
+				return err
+			}
+		} else {
+			var object storage.Newsletter
+			var ok bool
+
+			if object, ok, err = storage.ReadNewsletterByID(tx, *params.Email); err != nil {
+				return err
+			}
+			if !ok {
+				return ErrObjectNotFound
+			}
+
+			objects = append(objects, object)
+		}
+
+		return nil
 	}); err != nil {
 		return nil, err
 	}

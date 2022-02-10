@@ -99,7 +99,7 @@ type ServerInterface interface {
 	DeleteNewsletter(w http.ResponseWriter, r *http.Request, params DeleteNewsletterParams)
 	// Gets the list of emails subscribed to the newsletter
 	// (GET /newsletter)
-	GetNewsletter(w http.ResponseWriter, r *http.Request)
+	GetNewsletter(w http.ResponseWriter, r *http.Request, params GetNewsletterParams)
 	// Adds an email to the newsletter list
 	// (POST /newsletter)
 	PostNewsletter(w http.ResponseWriter, r *http.Request, params PostNewsletterParams)
@@ -1163,8 +1163,24 @@ func (siw *ServerInterfaceWrapper) DeleteNewsletter(w http.ResponseWriter, r *ht
 func (siw *ServerInterfaceWrapper) GetNewsletter(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	var err error
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetNewsletterParams
+
+	// ------------- Optional query parameter "email" -------------
+	if paramValue := r.URL.Query().Get("email"); paramValue != "" {
+
+	}
+
+	err = runtime.BindQueryParameter("form", true, false, "email", r.URL.Query(), &params.Email)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "email", Err: err})
+		return
+	}
+
 	var handler = func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetNewsletter(w, r)
+		siw.Handler.GetNewsletter(w, r, params)
 	}
 
 	for _, middleware := range siw.HandlerMiddlewares {

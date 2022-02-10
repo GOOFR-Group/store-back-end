@@ -32,10 +32,13 @@ func (*StoreImpl) PostNewsletter(w http.ResponseWriter, r *http.Request, params 
 }
 
 // GetNewsletter handles the /newsletter Get endpoint
-func (*StoreImpl) GetNewsletter(w http.ResponseWriter, r *http.Request) {
-	response, err := core.GetNewsletter()
+func (*StoreImpl) GetNewsletter(w http.ResponseWriter, r *http.Request, params oapi.GetNewsletterParams) {
+	response, err := core.GetNewsletter(params)
 	switch err {
 	case nil:
+	case core.ErrObjectNotFound:
+		writeNotFound(w, handlerNewsletter, fmt.Sprintf(ErrNewsletterEmailNotYetSubscribed, *params.Email))
+		return
 	default:
 		writeInternalServerError(w, handlerNewsletter, err)
 		return

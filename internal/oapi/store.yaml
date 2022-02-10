@@ -1902,8 +1902,16 @@ paths:
                 
     get:
       summary: "Gets the list of emails subscribed to the newsletter"
+      description: "Gets one registered email or all registered emails"
       tags:
         - Newsletter
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: false
+          description: "Email to search"
       responses:
         '500':
           description: internal server error
@@ -1917,6 +1925,15 @@ paths:
                 items: 
                   $ref: '#/components/schemas/NewsletterSchema'
         
+        '404':
+          description: "not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+              example:
+                error: "email not yet subscribed: [email]"
+                
     delete: 
       summary: "Removes an email from the newsletter list"
       tags:
