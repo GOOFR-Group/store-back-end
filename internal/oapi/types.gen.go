@@ -372,6 +372,12 @@ type DeleteNewsletterParams struct {
 	Email string `json:"email"`
 }
 
+// GetNewsletterParams defines parameters for GetNewsletter.
+type GetNewsletterParams struct {
+	// Email to search
+	Email *string `json:"email,omitempty"`
+}
+
 // PostNewsletterParams defines parameters for PostNewsletter.
 type PostNewsletterParams struct {
 	// Email to subscribe
