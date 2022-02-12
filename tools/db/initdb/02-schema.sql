@@ -126,7 +126,7 @@ CREATE TABLE "newsletter" (
 
 ALTER TABLE "client_search_history" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "client_search_history" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "client_search_history" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "access" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
@@ -134,33 +134,33 @@ ALTER TABLE "wallet" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON
 
 ALTER TABLE "address" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "game" ADD FOREIGN KEY ("id_publisher") REFERENCES "publisher" ("id");
+ALTER TABLE "game" ADD FOREIGN KEY ("id_publisher") REFERENCES "publisher" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "tag_game" ADD FOREIGN KEY ("id_tag") REFERENCES "tag" ("id");
+ALTER TABLE "tag_game" ADD FOREIGN KEY ("id_tag") REFERENCES "tag" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "tag_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "tag_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "image_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "image_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "review" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "review" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "review" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "wishlist" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "wishlist" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "wishlist" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "game_library" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "game_library" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "game_library" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "cart" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "cart" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "cart" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "invoice_header" ADD FOREIGN KEY ("id_client") REFERENCES "client" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_invoice") REFERENCES "invoice_header" ("id_invoice");
+ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_invoice") REFERENCES "invoice_header" ("id_invoice") ON DELETE CASCADE;
 
-ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id");
+ALTER TABLE "invoice_game" ADD FOREIGN KEY ("id_game") REFERENCES "game" ("id") ON DELETE CASCADE;
 
