@@ -124,6 +124,28 @@ func ReadGamesAndAverageOrderByAvgReviewDesc(t Transaction, limit int64) (object
 	return
 }
 
+func ReadGamesAndSalesOrderBySalesDesc(t Transaction, limit int64) (objects []Game, sales []int64, err error) {
+	if _, err = t.Select(GameTable+".*").
+		From(GameTable).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc("COUNT(" + GameTable + "." + GameIDDb + ")").
+		Limit(uint64(limit)).
+		Load(&objects); err != nil {
+		return
+	}
+
+	_, err = t.Select("COUNT("+GameTable+"."+GameIDDb+")").
+		From(GameTable).
+		Join(GameLibraryTable, GameTable+"."+GameIDDb+" = "+GameLibraryTable+"."+GameLibraryIDGameDb).
+		GroupBy(GameTable + "." + GameIDDb).
+		OrderDesc("COUNT(" + GameTable + "." + GameIDDb + ")").
+		Limit(uint64(limit)).
+		Load(&sales)
+
+	return
+}
+
 func ReadGamesOrderByReleaseDateDescAndByAvgReviewDesc(t Transaction, limit int64) (objects []Game, err error) {
 	_, err = t.Select(GameTable+".*").
 		From(GameTable).

@@ -25,6 +25,9 @@ type ServerInterface interface {
 	// Updates an address
 	// (PUT /address)
 	PutAddress(w http.ResponseWriter, r *http.Request, params PutAddressParams)
+	// Gets the bestselling games
+	// (GET /bestSellers)
+	GetBestSellers(w http.ResponseWriter, r *http.Request)
 	// Removes a game from the client's cart
 	// (DELETE /cart)
 	DeleteCart(w http.ResponseWriter, r *http.Request, params DeleteCartParams)
@@ -333,6 +336,21 @@ func (siw *ServerInterfaceWrapper) PutAddress(w http.ResponseWriter, r *http.Req
 
 	var handler = func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PutAddress(w, r, params)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetBestSellers operation middleware
+func (siw *ServerInterfaceWrapper) GetBestSellers(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetBestSellers(w, r)
 	}
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2145,6 +2163,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Put(options.BaseURL+"/address", wrapper.PutAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/bestSellers", wrapper.GetBestSellers)
 	})
 	r.Group(func(r chi.Router) {
 		r.Delete(options.BaseURL+"/cart", wrapper.DeleteCart)

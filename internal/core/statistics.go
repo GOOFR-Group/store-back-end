@@ -7,7 +7,7 @@ import (
 	"github.com/goofr-group/store-back-end/internal/utils/mathi"
 )
 
-const topReviewedGamesLimit = 100
+const statisticGamesLimit = 100
 
 // GetTopReviews gets the top reviewed games
 func GetTopReviews() ([]oapi.TopReviewsSchema, error) {
@@ -17,7 +17,7 @@ func GetTopReviews() ([]oapi.TopReviewsSchema, error) {
 	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
 		var err error
 
-		if games, averages, err = storage.ReadGamesAndAverageOrderByAvgReviewDesc(tx, topReviewedGamesLimit); err != nil {
+		if games, averages, err = storage.ReadGamesAndAverageOrderByAvgReviewDesc(tx, statisticGamesLimit); err != nil {
 			return err
 		}
 
@@ -36,4 +36,33 @@ func GetTopReviews() ([]oapi.TopReviewsSchema, error) {
 	}
 
 	return topReviews, nil
+}
+
+// GetBestSellers gets the bestselling games
+func GetBestSellers() ([]oapi.BestSellersSchema, error) {
+	var games []storage.Game
+	var sales []int64
+
+	if err := handleTransaction(nil, func(tx dbr.SessionRunner) error {
+		var err error
+
+		if games, sales, err = storage.ReadGamesAndSalesOrderBySalesDesc(tx, statisticGamesLimit); err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+
+	len := mathi.Min(len(games), len(sales))
+	bestSellers := make([]oapi.BestSellersSchema, len)
+	for i := 0; i < len; i++ {
+		bestSellers[i] = oapi.BestSellersSchema{
+			Game:  getGameFromModel(games[i]),
+			Sales: sales[i],
+		}
+	}
+
+	return bestSellers, nil
 }

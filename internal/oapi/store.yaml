@@ -2021,6 +2021,24 @@ paths:
                 items: 
                   $ref: '#/components/schemas/TopReviewsSchema'
                   
+  /bestSellers:
+    get:
+      summary: "Gets the bestselling games"
+      tags:
+        - Statistics
+      responses:
+        '500':
+          description: internal server error
+
+        '200': 
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/BestSellersSchema'
+                  
 components:
   schemas:
   
@@ -2374,6 +2392,18 @@ components:
         average:
           type: number
           format: double
+    
+    BestSellersSchema:
+      type: object
+      required:
+        - game
+        - sales
+      properties:
+        game: 
+          $ref: '#/components/schemas/GameSchema'
+        sales:
+          type: integer
+          format: int64
     
     VersionSchema:
       type: object
