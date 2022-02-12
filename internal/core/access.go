@@ -201,27 +201,6 @@ func PutAccess(params oapi.PutAccessParams, req oapi.PutAccessJSONRequestBody) e
 		return ErrInvalidEmail
 	}
 
-	if req.Password == nil && !req.Oauth {
-		return ErrPasswordRequired
-	}
-
-	var password string
-	var passwordOK bool
-	if req.Password != nil && !req.Oauth {
-		password = *req.Password
-
-		if !validPassword(password) {
-			return ErrInvalidPassword
-		}
-
-		var err error
-		if password, err = hashPassword(password); err != nil {
-			return err
-		}
-
-		passwordOK = true
-	}
-
 	var idClient uuid.UUID
 	var err error
 
@@ -247,16 +226,37 @@ func PutAccess(params oapi.PutAccessParams, req oapi.PutAccessJSONRequestBody) e
 			return ErrObjectAlreadyCreated
 		}
 
-		if _, ok, err = storage.ReadAccessByClientID(tx, client.ID); err != nil {
+		var access storage.Access
+
+		if access, ok, err = storage.ReadAccessByClientID(tx, client.ID); err != nil {
 			return err
 		}
 		if !ok {
 			return ErrObjectNotFound
 		}
 
+		var password string
+		var passwordOK bool
+		if req.Password == nil && !access.OAuth {
+			password = access.Password.String
+			passwordOK = access.Password.Valid
+		} else if req.Password != nil && !access.OAuth {
+			password = *req.Password
+
+			if !validPassword(password) {
+				return ErrInvalidPassword
+			}
+
+			if password, err = hashPassword(password); err != nil {
+				return err
+			}
+
+			passwordOK = true
+		}
+
 		if err = storage.UpdateAccessByClientID(tx, storage.Access{
 			IDClient: client.ID,
-			OAuth:    req.Oauth,
+			OAuth:    access.OAuth,
 			Email:    req.Email,
 			Password: sql.NullString{
 				String: password,
@@ -264,6 +264,12 @@ func PutAccess(params oapi.PutAccessParams, req oapi.PutAccessJSONRequestBody) e
 			},
 		}); err != nil {
 			return err
+		}
+
+		if req.Email != access.Email {
+			if err = storage.DeleteNewsletterByID(tx, access.Email); err != nil {
+				return err
+			}
 		}
 
 		return nil
