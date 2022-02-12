@@ -38,6 +38,15 @@ func GetYourStore(params oapi.GetYourStoreParams) (oapi.YourStoreSchema, error) 
 			if recommendedGames, err = storage.ReadGamesRecommendedByClientID(tx, idClient, yourStoreGamesLimit); err != nil {
 				return err
 			}
+
+			if len(recommendedGames) < yourStoreGamesLimit {
+				var tempRecommendedGames []storage.Game
+				if tempRecommendedGames, err = storage.ReadGamesOrderByAvgReviewDesc(tx, yourStoreGamesLimit); err != nil {
+					return err
+				}
+
+				recommendedGames = append(recommendedGames, tempRecommendedGames...)
+			}
 		}
 
 		if specialOffersGames, err = storage.ReadGamesWithDiscount(tx, yourStoreGamesLimit); err != nil {
