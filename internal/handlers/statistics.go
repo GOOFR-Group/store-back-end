@@ -20,3 +20,16 @@ func (*StoreImpl) GetTopReviews(w http.ResponseWriter, r *http.Request) {
 
 	writeOK(w, handlerStatistics, response)
 }
+
+// GetBestSellers handles the /bestSellers Get endpoint
+func (*StoreImpl) GetBestSellers(w http.ResponseWriter, r *http.Request) {
+	response, err := core.GetBestSellers()
+	switch err {
+	case nil:
+	default:
+		writeInternalServerError(w, handlerStatistics, err)
+		return
+	}
+
+	writeOK(w, handlerStatistics, response)
+}

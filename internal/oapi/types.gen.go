@@ -18,6 +18,12 @@ const (
 	GameSchemaStateUpcoming GameSchemaState = "upcoming"
 )
 
+// BestSellersSchema defines model for BestSellersSchema.
+type BestSellersSchema struct {
+	Game  GameSchema `json:"game"`
+	Sales int64      `json:"sales"`
+}
+
 // ClientAccessSchema defines model for ClientAccessSchema.
 type ClientAccessSchema struct {
 	Email    string  `json:"email"`
