@@ -189,7 +189,7 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 		body += fmt.Sprintf("\tName: %s\n", object.Name)
 		body += fmt.Sprintf("\tDescription: %s\n", object.Description)
 		body += fmt.Sprintf("\tRelease Date: %s\n", object.ReleaseDate.Format(timeLayout))
-		body += fmt.Sprintf("\tPrice: €%.2f", object.Price)
+		body += fmt.Sprintf("\tPrice: %.2f", object.Price)
 
 		message := []byte(fmt.Sprintf(smtpSubject, title) + body)
 		if err = smtp.SendMail(conf.SMTPAddress(), conf.SMTPAuthentication(), conf.SMTPEmailAddress(), emails, message); err != nil {
@@ -217,7 +217,7 @@ func PutGame(params oapi.PutGameParams, req oapi.PutGameJSONRequestBody) (oapi.G
 		body += "Game:\n"
 		body += fmt.Sprintf("\tName: %s\n", object.Name)
 		body += fmt.Sprintf("\tDescription: %s\n", object.Description)
-		body += fmt.Sprintf("\tPrice: €%.2f\n", object.Price)
+		body += fmt.Sprintf("\tPrice: %.2f\n", object.Price)
 		body += fmt.Sprintf("\tDiscount: %.2f%%", object.Discount)
 
 		message := []byte(fmt.Sprintf(smtpSubject, title) + body)
