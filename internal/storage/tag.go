@@ -33,7 +33,7 @@ func ReadTags(t Transaction) (objects []Tag, err error) {
 func ReadTagsByNameLike(t Transaction, like string, limit int64) (objects []Tag, err error) {
 	_, err = t.Select("*").
 		From(TagTable).
-		Where(TagNameDb+" LIKE '%?%'", like).
+		Where("LOWER(" + TagNameDb + ") LIKE LOWER('%" + like + "%')").
 		Limit(uint64(limit)).
 		Load(&objects)
 
