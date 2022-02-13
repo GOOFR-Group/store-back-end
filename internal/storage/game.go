@@ -80,7 +80,7 @@ func ReadGamesWithDiscount(t Transaction, limit int64) (objects []Game, err erro
 func ReadGamesByNameLike(t Transaction, like string, limit int64) (objects []Game, err error) {
 	_, err = t.Select("*").
 		From(GameTable).
-		Where(GameNameDb+" LIKE '%?%'", like).
+		Where("LOWER(" + GameNameDb + ") LIKE LOWER('%" + like + "%')").
 		Limit(uint64(limit)).
 		Load(&objects)
 
